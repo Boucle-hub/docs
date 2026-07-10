@@ -1,69 +1,53 @@
 ---
-title: "Add Your Ruffus Loyalty Card to Apple or Google Wallet"
+title: "Apple Wallet, Google Wallet, and PWA Support"
 sidebarTitle: "Wallet"
-description: "Let customers add their Ruffus loyalty card to Apple Wallet or Google Wallet — no app install needed, and stamps sync automatically."
+description: "Add your loyalty card to Apple Wallet, Google Wallet, or the home screen as a PWA — available immediately, with automatic updates on every stamp."
 ---
 
-After a customer earns their first stamp, Ruffus invites them to save their loyalty card directly to their phone's built-in Wallet app. From that point on, their card lives alongside their boarding passes and payment cards — always one tap away, always up to date. This is one of the most effective ways to keep customers coming back, because they see your brand every time they open their Wallet.
+Ruffus loyalty cards aren't limited to a browser tab. Customers can save their card to Apple Wallet, Google Wallet, or their phone's home screen as a Progressive Web App (PWA) — whichever fits how they use their phone.
 
-## How It Works
+## Adding the card to a wallet
 
-- **After the first stamp**, an **Add to Wallet** button appears on the customer's card in the browser.
-- The customer taps the button and follows the one-step prompt on their device.
-- The card is saved to Apple Wallet (iOS) or Google Wallet (Android).
-- **Each time the customer earns a new stamp**, the card updates automatically in their Wallet — no re-adding required.
-
-No native Ruffus app needs to be installed at any point. Wallet passes are managed entirely by iOS and Android, using the same infrastructure that handles airline boarding passes and store gift cards.
-
-## Supported Platforms
-
-| Platform | Wallet App | Requirements |
-|---|---|---|
-| **iOS** | Apple Wallet | iOS 9 or later (built into every iPhone) |
-| **Android** | Google Wallet | Android 5.0 or later; Google Wallet app installed |
-
-<Note>
-  Customers who prefer not to use a Wallet app can always access their card in any mobile or desktop browser, or install it as a **PWA** (see below).
-</Note>
-
-## What Is a PWA?
-
-A **Progressive Web App (PWA)** is a website that behaves like a native app. When a customer visits their Ruffus loyalty card in a mobile browser and taps **Add to Home Screen**, the card is saved as an icon on their home screen. It opens full-screen without a browser bar, loads instantly even on a slow connection, and receives notifications — just like a regular app, without going through an app store.
-
-PWA support is available on both iOS (Safari) and Android (Chrome) and works as an alternative to — or alongside — the Wallet pass.
-
-## Adding the Card to Each Platform
+The **Add to Apple Wallet** and **Add to Google Wallet** buttons are available on the customer card page right away — customers don't need to earn a stamp first to save their card.
 
 <Tabs>
   <Tab title="Apple Wallet">
-    **Requirements:** iPhone or iPad running iOS 9 or later.
-
-    1. After earning a first stamp, the customer taps **Add to Apple Wallet** on the card page.
-    2. A pass preview sheet slides up from the bottom of the screen showing the card design.
-    3. The customer taps **Add** in the top-right corner of the sheet.
-    4. The pass is saved to the **Wallet** app and appears under the **Passes** section.
-
-    **Viewing and using the card:**
-    - Open the **Wallet** app and scroll to the Ruffus pass.
-    - Alternatively, search "Ruffus" in Spotlight to find it instantly.
-    - The stamp count on the pass updates automatically each time a new stamp is earned — no action needed from the customer.
-
-    **Notifications:**
-    When a customer is one stamp away from a reward, Ruffus sends a lock-screen notification via the pass. The customer doesn't need to open any app to see it.
+    Works on any iPhone with Apple Wallet. Tapping **Add to Apple Wallet** installs the pass in one step.
   </Tab>
   <Tab title="Google Wallet">
-    **Requirements:** Android phone with the Google Wallet app installed (available free on the Google Play Store).
-
-    1. After earning a first stamp, the customer taps **Add to Google Wallet** on the card page.
-    2. The Google Wallet app opens (or prompts installation if not present) and shows a card preview.
-    3. The customer taps **Add to Wallet** on the confirmation screen.
-    4. The pass is saved and visible in Google Wallet under **Passes**.
-
-    **Viewing and using the card:**
-    - Open **Google Wallet**, swipe to find the Ruffus pass, or tap the search icon and type "Ruffus".
-    - The stamp count updates automatically after each scan — the customer doesn't need to open Wallet for the update to happen.
-
-    **Notifications:**
-    Google Wallet passes support push notifications on Android. Customers receive a one-stamp-away reminder directly on their notification shade without opening any app.
+    Works on Android with the Google Wallet app. Tapping **Add to Google Wallet** installs the pass in one step.
   </Tab>
 </Tabs>
+
+<Note>
+  There's no specific OS version requirement to worry about — if the customer's phone can run Apple Wallet or Google Wallet, their Ruffus card will work in it.
+</Note>
+
+## Passes stay up to date automatically
+
+Once a card is added to a wallet, it refreshes on its own — no action needed from the customer:
+
+- **Every stamp and every redemption** updates the pass automatically.
+- **Apple Wallet** shows a lock-screen change message — "New stamp added" — whenever the pass updates, so customers notice without opening the app.
+- **Google Wallet** updates the pass silently in the background; it doesn't show a system notification the way Apple's pass does.
+
+## Real notifications customers actually get
+
+Wallet passes update quietly, but Ruffus also sends real notifications (email and push) at two moments:
+
+1. **Reward ready** — the instant a customer completes their card, they get an email and push notification letting them know their reward is waiting.
+2. **Reward reminder** — if an earned reward sits unclaimed for 14 or more days, Ruffus sends an automatic follow-up email and push notification.
+
+<Note>
+  These are separate from the Apple Wallet lock-screen message. The reward-ready and reminder notifications go out over email and push regardless of whether the customer has added their card to a wallet at all.
+</Note>
+
+## Progressive Web App (PWA)
+
+Customers who'd rather not use a wallet app can add their loyalty card straight to their phone's home screen:
+
+- **Add to Home Screen** creates an app-like icon that opens directly to their card — no browser chrome, no typing in a URL.
+- The card is **offline-tolerant**, so a spotty connection at checkout doesn't break the experience.
+- It supports **web push**, so the reward-ready and reminder notifications above work the same way as on a native wallet pass.
+
+This makes the PWA a solid option for customers on phones or browsers that don't play well with Apple or Google Wallet.

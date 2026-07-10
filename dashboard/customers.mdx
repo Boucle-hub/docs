@@ -1,82 +1,58 @@
 ---
-title: "Understanding Your Customers in the Ruffus Dashboard"
-sidebarTitle: "Customers"
-description: "View visit history, identify your best customers, run email campaigns, configure win-back automation, and manage staff access — all from one place."
+title: "Members: Your Customer List, Timelines, and Win-Back Emails"
+sidebarTitle: "Members"
+description: "How the Members list, member detail timelines, CSV export, and automatic win-back emails work in the Ruffus dashboard."
 ---
 
-Your customers list is where the loyalty data gets personal. Rather than seeing aggregate numbers alone, you can drill down into individual customer behaviour — who visits most often, when they were last in, and how many stamps they have accumulated. This level of detail helps you recognise your regulars by name and make informed decisions about how to reward and re-engage them.
+Every person who joins your loyalty card shows up in **Members** — searchable, sortable, and exportable, with a full history for each individual customer.
 
-## The Customers List
+## The Members list
 
-Navigate to **Customers** in the left sidebar to open the full member list. Each row in the table represents one loyalty member and displays:
+Each row shows:
 
-| Column | What it shows |
-|---|---|
-| **Customer** | Display name or anonymised identifier |
-| **Total Stamps** | Cumulative stamps earned across all visits |
-| **Visits** | Number of times the customer has scanned their card |
-| **Last Seen** | Date of their most recent visit |
-| **Rewards Redeemed** | Total rewards claimed to date |
+- **Email** (masked for privacy — you'll see something like `j***@gmail.com`, not the full address)
+- **Lifetime stamps** and **current stamps** (their progress toward the next reward)
+- **Last seen** and **joined** dates
+- **Rewards redeemed**
 
-Click any customer row to open their individual profile, which shows a full timeline of stamp events and redemptions.
+You can search the list and sort by lifetime stamps, last seen, or joined date — handy for finding your most loyal customers or anyone who's gone quiet.
 
-## Identifying Your Best Customers
+## Member detail timeline
 
-Use the **Sort** control at the top of the customers list to reorder by visits or by total stamps earned. Your most engaged members rise to the top, giving you a clear view of who your loyalty programme is working hardest for. Knowing your best customers by name — and understanding how often and when they visit — lets you personalise your service and make those customers feel genuinely valued.
+Click into any member to see their full activity timeline: every stamp they've earned and every reward they've redeemed, in order. It's the fastest way to answer "has this customer actually been coming in?" during a support conversation.
+
+## Exporting your member list
+
+You can export your Members list as a CSV, up to 5,000 rows at a time. If you need activity over a specific date range instead — stamps, approvals, redemptions — the **Activity** page has its own CSV export with date-range filtering.
 
 <Tip>
-  Sort by **Last Seen** (oldest first) to quickly identify members who are overdue a visit. This is a good starting point before launching a win-back campaign.
+  Keep an export handy. If your subscription ever lapses, your CSV export from Members is also how you'd pull your customer list during the grace period — see [Plans & Billing](/billing/plans).
 </Tip>
 
-## Email Campaigns
+## Win-back emails (automatic)
 
-Ruffus lets you send email messages directly to your loyalty members from the dashboard — no third-party email tool required.
+Ruffus automatically brings inactive customers back for you — there's nothing to configure to turn this on:
 
-To send a campaign:
+- If a customer hasn't visited in **30+ days**, they get an automatic win-back email and push notification.
+- A customer won't be re-nudged more than once every 60 days, so nobody gets spammed.
+- All marketing messages are consent-gated with an unsubscribe link, in line with Québec's CASL rules.
 
-1. Go to **Customers → Campaigns** in the sidebar.
-2. Select **New Campaign**.
-3. Choose your audience: all members, members who haven't visited recently, or members who have redeemed at least once.
-4. Write your subject line and message body.
-5. Preview the email, then select **Send Campaign**.
-
-Campaigns are a practical way to announce a new reward, share a seasonal promotion, or simply remind members that you appreciate their support.
-
-## Automated Win-Back Emails
-
-A win-back email is sent automatically to any member who hasn't visited your store within a period you define. It nudges lapsed customers back through the door without requiring any manual effort on your part.
-
-To enable win-back emails:
-
-1. Go to **Customers → Automations**.
-2. Toggle **Win-Back Email** to on.
-3. Set the inactivity threshold — for example, 30, 60, or 90 days since the customer's last visit.
-4. Customise the email subject and body, or use the default template Ruffus provides.
-5. Select **Save**.
-
-Once enabled, Ruffus evaluates member activity daily and dispatches the win-back email to any customer who crosses the inactivity threshold.
+The one thing you _can_ customize is a short personal note — up to 280 characters — that gets appended to the win-back email. You'll find it under **Dashboard → Campaigns → Win-back**, alongside an audience preview and send history.
 
 <Note>
-  Win-back emails include an unsubscribe link by default, in line with email marketing regulations. Members who unsubscribe will not receive future campaign or automated emails.
+  There's no threshold selector (you can't change the 30-day window) and no template editor. The win-back email is designed and sent automatically — your customization is limited to that personal note.
 </Note>
 
-## Staff Access
+Ruffus also sends two other automatic emails, unrelated to inactivity: a "your reward is ready" email the moment a card is completed, and a reminder if an earned reward sits unclaimed for 14+ days.
 
-Ruffus distinguishes between two levels of access for your team:
+## Campaigns
 
-**Terminal access** — gives a staff member the ability to scan stamps and process reward redemptions at the point of sale. This is the appropriate level for floor staff and baristas. They do not see any customer data or analytics.
+For promos beyond win-back, head to **Dashboard → Campaigns**. You can run bonus-stamp or new-member-bonus promotions, scoped to a specific location and a start/end date. See [Multi-Location](/dashboard/multi-location) if you're running campaigns across more than one location.
 
-**Dashboard access** — gives a staff member full visibility of the analytics dashboard, customer list, and campaign tools. Grant this level only to managers or owners who need to analyse performance or send communications.
+## Staff access to members
 
-To add a staff member:
-
-1. Go to **Settings → Team**.
-2. Select **Invite Staff Member**.
-3. Enter their email address and choose their access level: **Terminal** or **Dashboard**.
-4. Select **Send Invite**.
-
-The invited staff member receives an email prompting them to set up their credentials. You can revoke access at any time from the same **Team** settings page.
+Only **owners** see the Members list and member details — managers are limited to the counter tools, and staff working the counter don't have dashboard logins at all. Staff use 4-digit PINs created at **Dashboard → Staff**, which only gate stamp approvals and redemptions, not access to your customer data. There's no email-invite flow for staff; PINs are the whole model.
 
 ## Privacy
 
-Your dashboard data is private and visible only to you and any team members you explicitly invite. Customer data — including visit history and contact details — is processed in accordance with [Ruffus's privacy policy](https://ruffus.app/privacy). Ruffus does not share individual customer data with third parties, and customers can request deletion of their data at any time through the Ruffus app.
+Member data is private to your account. Ruffus operates under Québec's Law 25, and customers can request erasure of their own record at any time — it's self-serve from their account, no need to email you.

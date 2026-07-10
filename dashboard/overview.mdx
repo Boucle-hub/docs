@@ -1,51 +1,79 @@
 ---
-title: "Ruffus Merchant Dashboard: A Full Feature Overview"
+title: "Dashboard Overview: A Tour of Your Ruffus Nav"
 sidebarTitle: "Overview"
-description: "Learn what the Ruffus merchant dashboard shows, how to access it, and how real-time data keeps you informed as your loyalty programme grows."
+description: "A tour of the Ruffus merchant dashboard — the Dashboard, Members, Activity, Rewards, and other sections you'll use every day, and what each one shows you."
 ---
 
-The Ruffus merchant dashboard is your command centre for understanding how your loyalty programme is performing. From the moment a customer collects their first stamp to the day they redeem a reward, every interaction is captured and surfaced here — so you always know what's working, who's coming back, and where there's room to grow.
+Everything you do to run your loyalty program happens at [app.ruffus.app](https://app.ruffus.app) — your Ruffus dashboard. This page walks through the navigation and what you'll find on the overview screen itself.
 
-## Accessing the Dashboard
+<Note>
+  Dashboard numbers refresh about once a minute, not instantly. If a stamp was just approved at the counter, give it a moment to show up in your charts.
+</Note>
 
-Log in at [ruffus.app](https://ruffus.app) using your merchant credentials. Once authenticated, you land directly on your dashboard home, which displays a live snapshot of your programme's performance. Bookmark the URL so your team can reach it quickly.
+## The navigation
 
-## At a Glance: Your Key Metrics
+The sidebar is split into two groups: **Admin** sections, which give a full picture of your program, and **Counter** sections, which is what staff use during service.
 
-At the top of the dashboard, three summary cards give you an immediate read on the health of your loyalty programme.
-
-<CardGroup cols={3}>
-  <Card title="Members" icon="users">
-    The total number of customers who have joined your loyalty programme. Watch this number grow as more people scan your card for the first time.
+<CardGroup cols={2}>
+  <Card title="Dashboard" icon="chart-line">
+    The overview screen — today's activity, member stats, and program health at a glance. Covered in detail below.
   </Card>
-  <Card title="Stamps" icon="stamp">
-    The cumulative number of stamps issued across all visits. This reflects how actively your customers are engaging with your programme.
+  <Card title="Members" icon="users">
+    Your full member list, searchable and sortable, plus a detail timeline for every customer.
+  </Card>
+  <Card title="Activity" icon="list">
+    A running log of stamp requests, approvals, and redemptions, with date-range CSV export.
   </Card>
   <Card title="Rewards" icon="gift">
-    The total rewards redeemed by your customers. A high redemption count means customers are completing stamp cycles and coming back to claim their benefit.
+    Redemption KPIs, full redemption history, and your top redeemers.
+  </Card>
+  <Card title="Import" icon="file-import">
+    Bring in an existing customer list to get your program started with a head start.
+  </Card>
+  <Card title="Redeem terminal" icon="qrcode">
+    Where staff enter a customer's 6-digit reward code (and PIN, if you require one) to complete a redemption.
+  </Card>
+  <Card title="Staff" icon="id-badge">
+    Create and manage the 4-digit PINs your staff use at the counter.
+  </Card>
+  <Card title="QR Poster" icon="image">
+    Card Studio — design your card's look and download your printable QR poster.
+  </Card>
+  <Card title="Campaigns" icon="megaphone">
+    Run bonus-stamp and new-member-bonus promos, and customize your win-back emails.
+  </Card>
+  <Card title="Ideas" icon="lightbulb">
+    Inspiration and suggestions for getting more out of your program.
+  </Card>
+  <Card title="Settings" icon="gear">
+    Locations, program rules, your white-label domain, language, and account settings.
+  </Card>
+  <Card title="Billing" icon="credit-card">
+    Your plan, payment method, and invoices. Billing lives at the top level of the nav, not under Settings.
   </Card>
 </CardGroup>
 
-## Visit Trends Chart
+## What's on the overview page
 
-The visit trends chart plots how often customers visit your store over a selected time window. Use the date range selector to zoom into a specific period — for example, to measure the impact of a promotion or a seasonal shift in traffic. Peaks in the chart align with high-stamp days, so you can correlate busy periods with real-world events like a local market or a sale.
+The **Dashboard** screen is your home base. At a glance it shows:
 
-## Redemption Rate
+- **Stamps today** — how many stamps were approved so far today.
+- **Member stats** — your total member count and recent growth.
+- **Activity feed** — a running stream of recent stamp requests and redemptions.
+- **Close to reward** — customers who are near completing their card, so you know who's about to come back for a redemption.
 
-Your redemption rate tells you what percentage of completed stamp cycles actually result in a reward being claimed. A high redemption rate signals that customers value your reward and are motivated to return for it. A low rate may indicate that customers are dropping off before completing their card — a useful prompt to reconsider your stamp target or reward offering.
+Scroll further and the detailed view adds:
 
-<Note>
-  Redemption rate is calculated as: **(total rewards redeemed ÷ total stamp cycles completed) × 100**. A cycle is completed when a customer reaches the stamp threshold you set for your card.
-</Note>
+- A **7-day chart** of stamp activity.
+- A **period chart** you can switch between 7, 30, and 90-day windows.
+- **Program health** — a summary of how your loyalty program is trending.
+- **At-risk members** — customers whose visit pattern suggests they're drifting away, which is also what feeds the automatic win-back emails (see [Members](/dashboard/customers)).
 
-## Recent Activity Feed
+## Owner vs. manager access
 
-Below the summary cards, the recent activity feed shows a live log of stamp collections and reward redemptions as they happen. Each entry displays the time of the event, the action taken (stamp or redemption), and an anonymised customer reference. Use this feed to verify that your terminal is scanning correctly during busy service periods.
+Ruffus has two dashboard roles:
 
-## Real-Time Data
+- **Owner** — full access to every section listed above.
+- **Manager** — limited to the counter tools: the Redeem terminal and the QR Poster page. Managers run the floor; they don't see billing, members, staff PIN management, or program-wide settings.
 
-Every scan and redemption updates your dashboard instantly. There is no need to refresh the page manually — figures adjust as your staff use the Ruffus terminal throughout the day. This means you can monitor a lunchtime rush in real time or confirm that a reward was successfully redeemed moments after it happened.
-
-<Tip>
-  Keep the dashboard open on a tablet or back-office screen during trading hours. Real-time updates make it easy to spot unusual activity — such as a spike in redemptions — as it unfolds.
-</Tip>
+Staff working the counter itself don't get dashboard accounts at all — they use a 4-digit PIN, set up by the owner from **Dashboard → Staff**. See [Members](/dashboard/customers) for more on staff access.

@@ -1,57 +1,58 @@
 ---
 title: "How Ruffus Works: Stamps, Rewards, and the Loyalty Loop"
 sidebarTitle: "How It Works"
-description: "Understand the full stamp lifecycle — from QR scan to reward redemption — plus verified stamps, reward reminders, and running multiple loyalty cards."
+description: "Understand the full stamp lifecycle — from QR scan to staff-approved stamp to reward redemption — plus fraud prevention and automated win-back."
 ---
-
-Ruffus is built around a simple loop: a customer scans your QR code, earns a stamp, and eventually claims a reward. Everything in between — fraud prevention, automatic reminders, real-time card updates — happens without any manual effort on your part. This page explains the mechanics from both sides of the counter.
 
 <Tabs>
   <Tab title="For Merchants">
-    ## Your side of the stamp loop
+    ## Displaying your QR code
 
-    ### Displaying your QR code
-    Once you create your loyalty card, Ruffus generates a unique, verified QR code tied to your account. Download your QR poster from the dashboard, print it, and place it at your point of sale. That's the only physical step you need to take.
+    Your QR poster lives at **Dashboard → QR Poster** (also called **Card Studio**). It encodes a permanent link to your loyalty card — it never changes, so you only ever need to print it once. Download it as a PNG or print it directly from your browser's print dialog and place it somewhere customers will naturally see it: your counter, your entrance, or your tables.
 
-    ### Redeeming rewards
-    When a customer's card shows a completed stamp row, ask them to show you their screen. In your merchant terminal, tap **Redeem** next to their card. The reward is logged, the customer's stamp count resets, and the cycle begins again — all in one tap.
+    ## Approving stamp requests
 
-    ### Verified stamps and fraud prevention
-    Every scan generates a server-side verification event. Ruffus automatically catches screenshot tricks, replayed QR codes, and duplicate scans, so your rewards are only given out for genuine visits. You never need to manually inspect or validate a stamp.
+    Stamps are never added automatically. When a customer scans your QR code and signs in, it creates a **stamp request** with a roughly 30-second window. You or your staff get an instant push notification and approve (or reject) it with one tap in the staff portal — only then does the stamp land on the customer's card. If nobody acts in time, the request simply expires and the customer can try again.
 
-    ### Reward reminders
-    When a customer is one stamp away from their reward, Ruffus sends them an automatic reminder. You don't set this up — it runs in the background for every customer, every time they're close to a reward.
+    <Note>
+      If you run multiple registers or devices at one location, each device gets its own staff QR variant, so a stamp request routes its push notification to the specific device where the customer is standing — not to every device at once.
+    </Note>
 
-    ### Running multiple loyalty cards
-    You can run more than one active card at a time. Use this to:
-    - Launch a **seasonal promotion** (for example, a summer drinks card) alongside your standard card.
-    - Create **tiered programs** that reward your highest-frequency customers differently.
-    - Separate programs across different **product lines or locations**.
+    ## Redeeming rewards
 
-    Each card has its own QR code, its own stamp count, and its own analytics — all managed from the same dashboard.
+    When a customer's card is full, they see a **Redeem** button that generates a 6-digit code (and QR) on their screen — "Show at counter." Staff enter or scan that code in the **Redeem Terminal** (Dashboard → Redeem terminal, or the staff portal on any phone, tablet, or computer). If you've enabled redemption PINs in Settings → Program rules, staff also enter their 4-digit PIN. Once redeemed, the stamp count resets and a new cycle starts — double-redemption isn't possible.
 
-    ### Analytics and win-back
-    Your dashboard shows visit trends, top customers, stamp activity, and redemption rates. Ruffus also sends automated win-back emails to customers who haven't visited in a while, helping you recover lapsed regulars without any manual outreach.
+    ## Fraud prevention
+
+    Every stamp passes through the same set of checks: the staff-approval gate described above, server-side verification, and a cooldown period between stamps for the same customer (60 minutes by default, adjustable — or disabled — in Settings → Program rules). Together these mean a screenshotted or replayed QR code does nothing on its own; a stamp only ever lands after a live approval.
+
+    ## Editing rewards and stamp thresholds
+
+    You can change your stamp count or reward label anytime in Card Studio. Changing the count never resets a customer's existing progress — and if you lower it, customers who newly qualify are granted their reward retroactively.
+
+    ## Analytics and win-back
+
+    Your dashboard overview shows stamps today, member stats, an activity feed, and a close-to-reward view, refreshing about once a minute. The detailed view adds a 7-day chart, a period chart (7/30/90 days), program health, and at-risk members. On the engagement side, Ruffus handles win-back for you automatically: customers inactive for 30+ days get an automatic win-back email and push (no more than once every 60 days per customer), and you can add a short personal note of up to 280 characters to those emails from Dashboard → Campaigns.
   </Tab>
   <Tab title="For Customers">
-    ## Your customer's experience
+    ## Collecting a stamp
 
-    ### Collecting a stamp
-    A customer doesn't need an account, an app, or any prior setup. They point their phone camera at your QR code and their browser opens the loyalty card instantly. A stamp is added to their card in real time — the whole interaction takes a few seconds.
+    Scan the QR code at the counter and sign in once — a phone number or email is enough, no app to download. That creates a stamp request, and staff typically approve it within seconds. Once approved, the stamp appears on your card right away.
 
-    ### Where the card lives
-    The card works in any mobile browser, but customers have two options for quick access on return visits:
+    ## Where your card lives
 
-    - **Save as a PWA** — the card appears on their home screen like a native app.
-    - **Add to Wallet** — the card lives in Apple Wallet or Google Wallet alongside their boarding passes and payment cards. Wallet cards update automatically, so the stamp count is always current.
+    Your card works straight from your mobile browser — nothing to install. You can also add it to your phone's home screen as a PWA, or add it to Apple Wallet or Google Wallet, available from the moment you first open your card. Wherever you keep it, it updates automatically every time you earn a stamp or redeem a reward.
 
-    ### Getting close to a reward
-    When a customer has earned all but one stamp, Ruffus sends them an automatic reminder. This nudge tells them they're one visit away from their reward — giving them a concrete reason to come back soon.
+    ## Getting close to a reward
 
-    ### Claiming a reward
-    Once the required number of stamps is collected, the card displays the reward clearly. The customer shows their screen to a staff member, who taps **Redeem** in the merchant terminal. The reward is marked as used and the card resets for the next cycle.
+    Your card shows your progress at a glance, with a friendly nudge once you're close. The moment you complete your card, you'll get an email and push notification letting you know your reward is ready. If it sits unclaimed for two weeks or more, you'll get a reminder so it doesn't get forgotten.
 
-    ### No duplicates, no cheating
-    Customers can't screenshot an old stamp screen and replay it. Every stamp is verified server-side at the moment of scan, so the count on a customer's card always reflects real visits only.
+    ## Claiming a reward
+
+    When your card is full, tap **Redeem** to generate a 6-digit code and QR on your screen. Show it to staff at the counter, they'll enter it in their terminal, and your reward is marked redeemed on the spot — then a fresh card starts.
+
+    ## No duplicates, no cheating
+
+    Because every stamp needs a live staff approval and there's a cooldown between stamps, there's no way to rack up stamps by rescanning, screenshotting, or sharing the QR code with someone else. Every stamp on your card reflects a real, staff-confirmed visit.
   </Tab>
 </Tabs>

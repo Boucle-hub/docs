@@ -1,66 +1,78 @@
 ---
-title: "Your Ruffus QR Code: Download, Display, and Accept Stamps"
+title: "Your QR Poster: Printing, Placement, and How Scans Work"
 sidebarTitle: "QR Code"
-description: "Download your printable QR poster, choose the best spots to display it, and understand exactly what happens when a customer scans."
+description: "Download or print your QR poster from Card Studio, learn where to display it, and see exactly what happens from the moment a customer scans it."
 ---
 
-Your QR code is the only thing standing between a customer and their first stamp. Ruffus generates it automatically when you create a card, and it never changes — so a poster you print today will still work a year from now. Getting it in front of customers is the one task that makes everything else run on its own.
+Your QR poster is the physical bridge between your storefront and your digital loyalty card. It's built automatically from your card's branding — no separate design step.
+
+## Getting your poster
+
+Your poster lives in **Card Studio** at **Dashboard → QR Poster**. It includes your logo, a headline, your reward label, and the QR code itself, all pulled from whatever you've set up in Card Studio.
+
+<Tabs>
+  <Tab title="Download PNG">
+    Click **Download** to save the poster as a PNG image. Print it at any size using your own printer or a local print shop, or use it directly in digital signage.
+  </Tab>
+  <Tab title="Print from browser">
+    Click **Print** to send the poster straight to your browser's print dialog — a quick option if you just need a page for the counter right now.
+  </Tab>
+</Tabs>
 
 <Note>
-  Ruffus requires **no POS system, no card reader, and no hardware of any kind**. Your QR code is a printed (or digital) image, and all stamp processing happens in the cloud the moment a customer scans it.
+  Your QR code encodes a permanent join link that never changes. Print it once and it stays valid for as long as your program is active — no reprinting when you update your branding or reward.
 </Note>
 
-## Download Your Printable QR Poster
+## Where to display it
 
-1. In your Ruffus dashboard, go to **Loyalty Cards** and select your card.
-2. Click the **QR Code** tab.
-3. Click **Download Poster**. Ruffus generates a print-ready PDF sized for A5 (half-sheet) by default. Use the **Size** dropdown to switch to A4, letter, or a small table-tent format before downloading.
-4. Print the poster at home, at a print shop, or send it directly to a commercial printer.
-
-The downloaded file includes your business name, logo, a brief instruction line ("Scan to collect your stamp"), and the QR code itself.
-
-## Where to Display Your QR Code
-
-Place your QR code anywhere customers naturally pause or look during their visit. The more visible it is, the more scans you'll capture.
-
-| Location | Why It Works |
+| Location | Why it works |
 |---|---|
-| **Counter or till area** | Customers are already stopped and waiting — perfect moment to scan |
-| **Front window** | Catches attention before customers even walk in |
-| **Table tent** | Great for cafés and restaurants where customers sit down |
-| **Receipt** | Prints alongside the transaction; customers see it at home too |
-| **Packaging or bags** | Travels with the customer and prompts a scan later |
+| Counter or register | Customers see it right as they're paying — the natural moment to scan. |
+| Entrance or window | Catches customers on their way in, before they've even ordered. |
+| Table tents | Good for sit-down spots where customers have a few idle minutes. |
+| Receipts | A QR on a printed or emailed receipt keeps the offer with them after they leave. |
 
-You can display the QR code in multiple locations at once — all scans feed into the same card.
+<Tip>
+  If you have more than one register or till, set up a device for each in your dashboard and display that device's own QR variant at its register. Each variant routes stamp requests to that specific device's staff push, so whoever is standing at that till gets the approval prompt — not a staff member across the room.
+</Tip>
 
-## What Happens When a Customer Scans
+## What happens when a customer scans
 
-1. The customer opens their phone's camera (or any QR scanner app) and points it at your code.
-2. A link appears — they tap it, and their loyalty card opens **instantly in the browser**. No app download, no account creation, and no waiting.
-3. A stamp is added to their card automatically.
-4. If it's their first stamp, they see an **Add to Wallet** button to save the card to Apple or Google Wallet.
-5. If they're one stamp away from a reward, they receive an automatic reminder.
-
-The whole sequence takes under ten seconds and is entirely self-serve — your staff don't need to touch anything.
-
-## Your QR Code Never Changes
-
-The QR code Ruffus generates for your card is permanent. You can safely:
-
-- Print large-format posters without worrying about reprinting later
-- Include the QR code in a permanent window decal or signage
-- Add it to printed menus or packaging in bulk
-
-The only reason you would ever need a new QR code is if you **archive a card and create a replacement card** — in that case, a new code is generated for the new card. Your existing printed posters for the old card would stop issuing stamps at that point.
-
-## What If a Customer Can't Scan?
-
-Some customers may have trouble scanning, usually because of an older device, a cracked camera lens, or low light. Here's what to suggest:
-
-- Ask them to try a different QR scanner app (several free options are available on both iOS and Android).
-- Move to a brighter spot — QR codes scan more reliably in good light.
-- Enlarge the printed poster if possible; codes that are too small can be harder for older cameras to read.
+<Steps>
+  <Step title="Their browser opens the join link">
+    No app install. The link opens directly in their phone's camera or browser.
+  </Step>
+  <Step title="They sign in">
+    First-time customers create a lightweight account with a phone number (SMS code), email, or Google/Apple sign-in. Returning customers are recognized automatically.
+  </Step>
+  <Step title="A stamp request goes out">
+    The customer sees a live countdown while their request — open for about 30 seconds — waits for staff.
+  </Step>
+  <Step title="Staff approves">
+    A staff device gets an instant push notification and taps **Approve**. The stamp lands on the card right away.
+  </Step>
+</Steps>
 
 <Note>
-  A **manual stamp lookup** feature — allowing staff to issue a stamp by searching for a customer without a scan — is on the Ruffus roadmap. Until it's available, contact support at support@ruffus.app and the team can add a stamp manually after verifying the visit.
+  If the customer already earned a stamp recently, they'll see a cooldown screen instead of a new request — this is expected and configurable in **Settings → Program rules**.
 </Note>
+
+## Troubleshooting scans
+
+<AccordionGroup>
+  <Accordion title="Customer's camera won't recognize the code">
+    Make sure the poster is well-lit and not glared over by overhead lighting or laminate glare. A matte print finish scans more reliably than glossy.
+  </Accordion>
+
+  <Accordion title="Customer can't get their camera app to open a link">
+    Older phones sometimes need a dedicated QR scanner app rather than the native camera. As a fallback, they can also open the join link directly — the same URL your poster encodes works fine typed or tapped from anywhere, including a link on your website or social bio.
+  </Accordion>
+
+  <Accordion title="Customer says they scanned but nothing happened for staff">
+    Check the staff device — the approval screen shows pending requests the instant they come in, so if nothing appeared the scan likely didn't complete, or the request already expired after 30 seconds. Have the customer try again.
+  </Accordion>
+
+  <Accordion title="Multiple staff devices, wrong one got the notification">
+    This usually means the wrong QR variant is on display. Confirm each register is showing its own per-device QR, not a shared one.
+  </Accordion>
+</AccordionGroup>

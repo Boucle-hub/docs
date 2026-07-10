@@ -1,0 +1,67 @@
+---
+title: "How Stamps and Rewards Work for Your Loyalty Programme"
+sidebarTitle: "Stamps & Rewards"
+description: "Learn how customers earn verified stamps, how rewards are redeemed, and how Ruffus blocks duplicate scans — with no staff action required."
+---
+
+Stamps are the engine of your loyalty programme. Customers earn them by scanning your QR code, rewards are issued automatically when the goal is reached, and every stamp is cryptographically verified so you never have to worry about fraud or duplicate scans. The whole flow is designed to require zero effort from your staff during normal operation.
+
+## How Customers Earn Stamps
+
+A customer earns a stamp by scanning the QR code you display at your location. Here's what happens in order:
+
+1. The customer opens their camera app (or a QR scanner) and points it at your code.
+2. Their loyalty card opens instantly in the browser — no app download required.
+3. A new stamp is added to their card automatically.
+4. If they're one stamp away from a reward, they receive an automatic reminder notification.
+
+The entire process takes a few seconds and requires **no action from your staff**.
+
+## How Rewards Are Redeemed
+
+When a customer collects enough stamps to complete a reward cycle, a **Redeem** button appears on their card.
+
+1. The customer shows their card (in browser, PWA, or Wallet) to your staff with the Redeem button visible.
+2. A staff member opens the **Ruffus terminal** — the staff-facing view in your dashboard — and taps **Confirm Redemption**.
+3. The customer's stamp count resets and a new reward cycle begins.
+
+The terminal is accessible from any device with a browser, so your staff can confirm redemptions from a phone, tablet, or computer at the counter.
+
+## Changing Your Reward After Launch
+
+You can update your reward at any time — the name, the description, or both.
+
+1. Go to **Loyalty Cards**, select your card, and click **Edit Card**.
+2. Update the **Reward Name** and/or **Reward Description** fields.
+3. Click **Save Changes**.
+
+Existing customer progress is fully preserved. A customer who has 7 of 10 stamps keeps all 7 — only the label of what they're working toward changes.
+
+## Verified Stamps: How Fraud Is Prevented
+
+Every stamp issued by Ruffus is tied to a real, unique scan event. The platform automatically blocks:
+
+- **Screenshot fraud** — a static screenshot of a QR code cannot generate a new stamp.
+- **Duplicate codes** — each scan is validated server-side; replaying the same scan does nothing.
+- **Manufactured stamps** — stamps can only be added through a verified scan of your active QR code.
+
+You don't need to configure anything for this protection — it's on by default for every card on every plan.
+
+## What-If Scenarios
+
+<AccordionGroup>
+  <Accordion title="What if a customer loses their stamp progress?">
+    A customer's stamp progress is tied to their device and account. If they switch devices or clear their browser data without having saved the card to Apple or Google Wallet, they may lose access to their progress. In that case, ask them to contact Ruffus support at support@ruffus.app with their name and the business they visited. The support team can look up their scan history and restore their progress manually.
+
+    To avoid this entirely, encourage customers to tap **Add to Wallet** after their first stamp — Wallet passes persist across device restores and browser clears.
+  </Accordion>
+  <Accordion title="What if a customer tries to redeem the same reward twice?">
+    The Redeem button disappears as soon as a staff member confirms the redemption in the Ruffus terminal. The stamp count resets immediately, so there is no window in which the same reward can be claimed twice — even if the customer still has the old screen open.
+  </Accordion>
+  <Accordion title="What if a customer says a stamp didn't register after scanning?">
+    First, ask the customer to refresh their card in the browser or Wallet. Stamps are processed in real time, but an occasional network hiccup can delay the UI update by a few seconds. If the stamp still doesn't appear, contact support with the date, time, and customer identifier — the support team can review the scan log and add the missing stamp manually.
+  </Accordion>
+  <Accordion title="What if I want to give a customer a bonus stamp?">
+    You can add a manual stamp to any customer's card from the **Customers** section of your dashboard. Search for the customer, open their card, and click **Add Stamp**. Manual stamps are logged separately from scan-earned stamps so your analytics stay accurate.
+  </Accordion>
+</AccordionGroup>

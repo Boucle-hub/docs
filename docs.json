@@ -1,0 +1,74 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "Ruffus",
+  "theme": "almond",
+  "logo": {
+    "light": "https://media.brand.dev/8aabb7d4-e367-4b34-b54a-e7678b99d0f2.svg",
+    "dark": "https://media.brand.dev/9d870fd4-d5a6-4567-8dd7-3e8c82aedaa1.png"
+  },
+  "favicon": "https://media.brand.dev/965a3ac7-f344-426a-901d-fa9d2095f402.png",
+  "colors": {
+    "primary": "#f8d707",
+    "light": "#b7a426"
+  },
+  "navbar": {
+    "primary": {
+      "type": "button",
+      "label": "Start Free Trial",
+      "href": "https://ruffus.app/auth/signup"
+    }
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "how-it-works"
+            ]
+          },
+          {
+            "group": "Your Loyalty Card",
+            "pages": [
+              "loyalty-card/customization",
+              "loyalty-card/stamps-and-rewards",
+              "loyalty-card/qr-code",
+              "loyalty-card/wallet"
+            ]
+          },
+          {
+            "group": "Dashboard & Analytics",
+            "pages": [
+              "dashboard/overview",
+              "dashboard/customers",
+              "dashboard/multi-location"
+            ]
+          },
+          {
+            "group": "Plans & Billing",
+            "pages": [
+              "billing/plans",
+              "billing/faq"
+            ]
+          },
+          {
+            "group": "Help",
+            "pages": [
+              "help/faq",
+              "help/contact",
+              "help/privacy",
+              "help/terms"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "footer": {
+    "socials": {}
+  }
+}

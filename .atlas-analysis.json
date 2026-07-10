@@ -1,0 +1,85 @@
+{
+  "projectType": "saas",
+  "projectName": "Ruffus",
+  "projectDescription": "Ruffus is a digital loyalty stamp card platform that lets local businesses create branded loyalty programs accessible via web, Apple Wallet, Google Wallet, and PWA — no hardware or POS integration required.",
+  "theme": "almond",
+  "primaryColor": "#f8d707",
+  "lightColor": "#b7a426",
+  "darkColor": null,
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "how-it-works"
+            ]
+          },
+          {
+            "group": "Your Loyalty Card",
+            "pages": [
+              "loyalty-card/customization",
+              "loyalty-card/stamps-and-rewards",
+              "loyalty-card/qr-code",
+              "loyalty-card/wallet"
+            ]
+          },
+          {
+            "group": "Dashboard & Analytics",
+            "pages": [
+              "dashboard/overview",
+              "dashboard/customers",
+              "dashboard/multi-location"
+            ]
+          },
+          {
+            "group": "Plans & Billing",
+            "pages": [
+              "billing/plans",
+              "billing/faq"
+            ]
+          },
+          {
+            "group": "Help",
+            "pages": [
+              "help/faq",
+              "help/contact",
+              "help/privacy",
+              "help/terms"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Branded digital stamp loyalty cards (web, PWA, Apple Wallet, Google Wallet)",
+    "No hardware or POS integration required — just a printed QR code",
+    "Setup in under 5 minutes",
+    "Real-time merchant analytics dashboard (visits, top customers, redemptions)",
+    "Automated reward reminders when customers are one stamp away",
+    "Multiple loyalty cards per business (seasonal promos, tiers)",
+    "Verified stamp scanning — prevents screenshot fraud and duplicate codes",
+    "Multi-location support with consolidated analytics (Growth & Custom plans)",
+    "Email campaigns and automated win-back emails",
+    "Bilingual FR/EN program support",
+    "14-day free trial, no credit card required"
+  ],
+  "publicApiSurface": [
+    "Merchant signup / account creation",
+    "Loyalty card creation (stamp count, reward, branding)",
+    "QR code generation and printable poster",
+    "Customer stamp collection via QR scan",
+    "Reward redemption flow",
+    "Apple Wallet / Google Wallet pass issuance",
+    "Merchant analytics dashboard (members, stamps, rewards, visit trends)",
+    "Multi-store analytics rollup (Growth plan)",
+    "Email campaign sending",
+    "Automated win-back email triggers",
+    "Plan upgrade / downgrade / cancellation"
+  ]
+}

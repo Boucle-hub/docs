@@ -1,0 +1,57 @@
+---
+title: "How Ruffus Works: Stamps, Rewards, and the Loyalty Loop"
+sidebarTitle: "How It Works"
+description: "Understand the full stamp lifecycle — from QR scan to reward redemption — plus verified stamps, reward reminders, and running multiple loyalty cards."
+---
+
+Ruffus is built around a simple loop: a customer scans your QR code, earns a stamp, and eventually claims a reward. Everything in between — fraud prevention, automatic reminders, real-time card updates — happens without any manual effort on your part. This page explains the mechanics from both sides of the counter.
+
+<Tabs>
+  <Tab title="For Merchants">
+    ## Your side of the stamp loop
+
+    ### Displaying your QR code
+    Once you create your loyalty card, Ruffus generates a unique, verified QR code tied to your account. Download your QR poster from the dashboard, print it, and place it at your point of sale. That's the only physical step you need to take.
+
+    ### Redeeming rewards
+    When a customer's card shows a completed stamp row, ask them to show you their screen. In your merchant terminal, tap **Redeem** next to their card. The reward is logged, the customer's stamp count resets, and the cycle begins again — all in one tap.
+
+    ### Verified stamps and fraud prevention
+    Every scan generates a server-side verification event. Ruffus automatically catches screenshot tricks, replayed QR codes, and duplicate scans, so your rewards are only given out for genuine visits. You never need to manually inspect or validate a stamp.
+
+    ### Reward reminders
+    When a customer is one stamp away from their reward, Ruffus sends them an automatic reminder. You don't set this up — it runs in the background for every customer, every time they're close to a reward.
+
+    ### Running multiple loyalty cards
+    You can run more than one active card at a time. Use this to:
+    - Launch a **seasonal promotion** (for example, a summer drinks card) alongside your standard card.
+    - Create **tiered programs** that reward your highest-frequency customers differently.
+    - Separate programs across different **product lines or locations**.
+
+    Each card has its own QR code, its own stamp count, and its own analytics — all managed from the same dashboard.
+
+    ### Analytics and win-back
+    Your dashboard shows visit trends, top customers, stamp activity, and redemption rates. Ruffus also sends automated win-back emails to customers who haven't visited in a while, helping you recover lapsed regulars without any manual outreach.
+  </Tab>
+  <Tab title="For Customers">
+    ## Your customer's experience
+
+    ### Collecting a stamp
+    A customer doesn't need an account, an app, or any prior setup. They point their phone camera at your QR code and their browser opens the loyalty card instantly. A stamp is added to their card in real time — the whole interaction takes a few seconds.
+
+    ### Where the card lives
+    The card works in any mobile browser, but customers have two options for quick access on return visits:
+
+    - **Save as a PWA** — the card appears on their home screen like a native app.
+    - **Add to Wallet** — the card lives in Apple Wallet or Google Wallet alongside their boarding passes and payment cards. Wallet cards update automatically, so the stamp count is always current.
+
+    ### Getting close to a reward
+    When a customer has earned all but one stamp, Ruffus sends them an automatic reminder. This nudge tells them they're one visit away from their reward — giving them a concrete reason to come back soon.
+
+    ### Claiming a reward
+    Once the required number of stamps is collected, the card displays the reward clearly. The customer shows their screen to a staff member, who taps **Redeem** in the merchant terminal. The reward is marked as used and the card resets for the next cycle.
+
+    ### No duplicates, no cheating
+    Customers can't screenshot an old stamp screen and replay it. Every stamp is verified server-side at the moment of scan, so the count on a customer's card always reflects real visits only.
+  </Tab>
+</Tabs>

@@ -35,6 +35,7 @@
             "group": "Your Loyalty Card",
             "pages": [
               "loyalty-card/customization",
+              "loyalty-card/multiple-cards",
               "loyalty-card/stamps-and-rewards",
               "loyalty-card/qr-code",
               "loyalty-card/wallet"

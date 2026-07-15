@@ -58,6 +58,13 @@
             ]
           },
           {
+            "group": "Developer API",
+            "pages": [
+              "api/overview",
+              "api/read-endpoints"
+            ]
+          },
+          {
             "group": "Help",
             "pages": [
               "help/faq",

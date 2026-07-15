@@ -1,0 +1,110 @@
+---
+title: "Ruffus API: Authentication, Keys, and Conventions"
+sidebarTitle: "API Overview"
+description: "Authenticate to the Ruffus public API with API keys, understand scopes, plan entitlements, rate limits, pagination, and the error envelope."
+hidden: true
+noindex: true
+---
+
+> **Not yet live.** The Ruffus public API is in private preview. This reference describes the v1 read API; endpoints activate for your account at launch.
+
+The Ruffus API lets you read your loyalty data — locations, cards, customers, balances, rewards, and event feeds — from your own systems. It is a server-to-server API: requests from browsers are unsupported by design (no CORS headers are sent), because API keys must never ship in front-end code.
+
+## Base URL
+
+```text
+https://api.ruffus.app/v1
+```
+
+Only `/v1/*` paths are served on this host. All responses are JSON.
+
+## Authentication
+
+Create keys from **Dashboard → API keys** (owner role required). The full key — format `rk_live_…` — is shown **once** at creation; store it securely. Only a hash is kept on our side, so a lost key can't be recovered, only revoked and replaced.
+
+Pass the key on every request, either way:
+
+```bash
+curl https://api.ruffus.app/v1/ping \
+  -H "X-Api-Key: rk_live_..."
+
+# or
+curl https://api.ruffus.app/v1/ping \
+  -H "Authorization: Bearer rk_live_..."
+```
+
+`GET /v1/ping` is the connectivity check — it echoes your merchant id, the key's scopes, and your plan tier, and requires no particular scope.
+
+`rk_test_` keys are reserved for a future sandbox mode and are currently rejected with `test_mode_unsupported`.
+
+## Scopes
+
+Each key carries an explicit set of scopes, chosen at creation:
+
+| Scope | Grants |
+| --- | --- |
+| `customers:read` | Customer lookup and membership balances |
+| `customers:write` | Creating and updating customers _(write API, upcoming)_ |
+| `loyalty:read` | Locations, cards, rewards, and event feeds |
+| `loyalty:write` | Issuing stamps and redeeming rewards _(write API, upcoming)_ |
+| `webhooks:manage` | Webhook endpoint management _(upcoming)_ |
+
+## Plan entitlements
+
+| Plan | API access |
+| --- | --- |
+| Basic | Not available |
+| Growth | Read scopes \+ `webhooks:manage`, 300 requests/min per key |
+| Custom | All scopes, 600 requests/min per key |
+
+If your plan changes, existing keys are kept: requests using scopes your new plan lacks return `plan_not_entitled` until you upgrade again.
+
+## Rate limits
+
+Per-key limits are listed above; an additional per-account ceiling applies across all keys. When you exceed a limit the response is `429` with `Retry-After`, `X-RateLimit-Limit`, `X-RateLimit-Remaining`, and `X-RateLimit-Reset` headers.
+
+## Errors
+
+Every error uses one envelope:
+
+```json
+{
+  "error": {
+    "code": "missing_scope",
+    "message": "This key does not have the 'loyalty:read' scope.",
+    "requestId": "req_5f0c…"
+  }
+}
+```
+
+`code` is stable and machine-readable; `message` is human-readable and may change. `requestId` is echoed in the `X-Request-Id` header on every response (success included) — quote it when contacting support.
+
+| Code | Status | Meaning |
+| --- | --- | --- |
+| `invalid_api_key` | 401 | Missing, malformed, or unknown key |
+| `expired_api_key` | 401 | Key past its expiry date |
+| `revoked_api_key` | 401 | Key was revoked |
+| `test_mode_unsupported` | 403 | `rk_test_` keys not yet supported |
+| `missing_scope` | 403 | Key lacks the required scope |
+| `plan_not_entitled` | 403 | Your plan doesn't include this capability |
+| `rate_limited` | 429 | Too many requests |
+| `validation_error` | 400 | Bad parameters — see `details[]` per field |
+| `not_found` | 404 | No such resource in your account |
+| `internal_error` | 500 | Something went wrong on our side |
+
+## Pagination
+
+List endpoints are cursor-paginated:
+
+- `limit` — 1 to 100, default 25
+- `starting_after` — the `id` of the last item from your previous page
+
+```json
+{ "object": "list", "data": [ … ], "hasMore": true }
+```
+
+When `hasMore` is `true`, request the next page with `starting_after` set to the last item's `id`. Ordering is stable (creation time, then id).
+
+## Dates and privacy
+
+All timestamps are UTC ISO-8601 with a `Z` suffix. Customers who exercised their right to erasure return `not_found` on lookup and appear in event feeds with `"customerId": null, "anonymized": true`. Email and phone appear only on the direct customer endpoint, never in lists or feeds.

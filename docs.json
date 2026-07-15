@@ -61,7 +61,8 @@
             "group": "Developer API",
             "pages": [
               "api/overview",
-              "api/read-endpoints"
+              "api/read-endpoints",
+              "api/webhooks"
             ]
           },
           {

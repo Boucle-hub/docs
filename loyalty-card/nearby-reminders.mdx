@@ -1,0 +1,25 @@
+---
+title: "Nearby Reminders: Apple Wallet Lock-Screen Alerts"
+sidebarTitle: "Nearby Reminders"
+description: "Turn on Apple Wallet's nearby reminder so customers see their loyalty card on their lock screen when they're near your shop."
+icon: "location-dot"
+---
+
+Apple Wallet can surface a customer's loyalty card on their lock screen when they're physically near your shop — a gentle nudge to stop in and collect a stamp. Ruffus lets you turn this on per card.
+
+## Turning it on
+
+The **Nearby reminder** toggle lives in **Settings → Program rules**, per card. It's **off by default** — turn it on for any card where you want the reminder.
+
+<Note>
+  There's nothing for the customer to set up. If they've already added the card to Apple Wallet, the reminder activates automatically the next time their pass refreshes.
+</Note>
+
+## What to expect
+
+- **Apple Wallet only.** Google Wallet has no equivalent feature — Google doesn't support geofenced passes, so this reminder never appears for customers using Google Wallet or the home-screen PWA.
+- **The radius isn't configurable.** iOS decides how close a customer needs to be before the pass surfaces on their lock screen — roughly 100 metres. Ruffus can't widen or narrow that radius.
+- **Uses your store's address.** Ruffus attaches the location(s) you have on file — up to 10 — to the pass so iOS knows where to trigger the reminder.
+- **Changes apply on the next refresh, not instantly.** Turning the toggle on or off doesn't push immediately to passes already sitting in a customer's wallet — it takes effect the next time each pass refreshes, such as after their next stamp.
+
+See [Multi-Location](/dashboard/multi-location) if you need to check or update the addresses on file for your locations, and [Wallet](/loyalty-card/wallet) for how Apple Wallet passes work more generally.

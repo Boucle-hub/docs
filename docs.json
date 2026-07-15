@@ -38,6 +38,7 @@
               "loyalty-card/multiple-cards",
               "loyalty-card/stamps-and-rewards",
               "loyalty-card/qr-code",
+              "loyalty-card/nearby-reminders",
               "loyalty-card/wallet"
             ]
           },

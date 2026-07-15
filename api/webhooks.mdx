@@ -1,0 +1,256 @@
+---
+title: "Ruffus Webhooks: Events, Signatures, and Delivery"
+sidebarTitle: "Webhooks"
+description: "Receive signed HTTP callbacks when customers enroll, earn stamps, unlock rewards, or redeem — with verification samples, retry behavior, and delivery logs."
+hidden: true
+noindex: true
+---
+
+> **Not yet live.** The Ruffus public API is in private preview. This reference describes v1 outbound webhooks; endpoints activate for your account at launch.
+
+Webhooks push loyalty events to your server as they happen, so you don't have to poll the [event feeds](/api/read-endpoints). Ruffus sends an HTTPS `POST` to your endpoint for every event type you subscribe to, signed so you can verify it came from us.
+
+Managing webhooks requires the `webhooks:manage` scope (Growth plan and up).
+
+## Event catalog
+
+| Type | Fired when |
+|---|---|
+| `customer.enrolled` | A customer joins one of your locations (includes their new membership ids) |
+| `stamp.issued` | Stamps are credited — staff approval, referral bonus, or CSV import (`source` tells you which); includes the balance after |
+| `reward.unlocked` | A membership crosses the stamp threshold and a reward is minted |
+| `reward.redeemed` | A reward is redeemed |
+
+## The event envelope
+
+Every delivery body has the same shape. The `data` payload for reward events matches what `GET /v1/rewards` returns — the read API and webhooks never disagree about a resource's shape.
+
+```json
+{
+  "id": "evt_5f0c4a13-...",
+  "type": "stamp.issued",
+  "createdAt": "2026-07-02T13:11:00.000Z",
+  "apiVersion": "v1",
+  "merchantId": "a1b2...",
+  "locationId": "9b2f...",
+  "data": {
+    "customerId": "7e31...",
+    "locationId": "9b2f...",
+    "membershipId": "m9f4...",
+    "cardId": "c1a2...",
+    "stamps": 1,
+    "balance": 7,
+    "source": "staff"
+  }
+}
+```
+
+Erased (anonymized) customers are masked in webhook payloads exactly as in the read API: `customerId` becomes `null` and `anonymized` is `true`.
+
+Each request also carries:
+
+| Header | Contents |
+|---|---|
+| `Ruffus-Signature` | Timestamp + HMAC signature (see below) |
+| `Ruffus-Event-Id` | The event id (`evt_…` matches the envelope) — your idempotency key |
+| `Ruffus-Event-Type` | The event type, for routing before you parse the body |
+
+Retries and replays of an event reuse the same `Ruffus-Event-Id` with a byte-identical body — deduplicate on it and processing exactly once is easy.
+
+## Verifying signatures
+
+Every endpoint has a signing secret (`whsec_…`), shown once when you create the endpoint or rotate the secret. The `Ruffus-Signature` header is:
+
+```text
+Ruffus-Signature: t=1751461860,v1=5257a869e7ecebeda32affa62cdca3fa51cad7e77dd2a40c9e4d1c1adad30ef6
+```
+
+`t` is a Unix timestamp (seconds); `v1` is `HMAC-SHA256(secret, "{t}.{rawBody}")`, hex-encoded. During the 24 hours after a secret rotation the header carries **two** `v1` entries — accept if **any** entry matches. Reject deliveries whose timestamp is more than 5 minutes from your clock (replay guard).
+
+Always compute the HMAC over the **raw request body bytes** — don't re-serialize parsed JSON.
+
+<CodeGroup>
+
+```javascript Node.js
+const crypto = require('node:crypto');
+
+function verifyRuffusSignature(header, rawBody, secret, toleranceSeconds = 300) {
+  const parts = header.split(',').map((p) => p.trim());
+  const t = Number(parts.find((p) => p.startsWith('t='))?.slice(2));
+  const signatures = parts.filter((p) => p.startsWith('v1=')).map((p) => p.slice(3));
+  if (!Number.isInteger(t) || signatures.length === 0) return false;
+  if (Math.abs(Math.floor(Date.now() / 1000) - t) > toleranceSeconds) return false;
+
+  const expected = crypto.createHmac('sha256', secret).update(`${t}.${rawBody}`).digest('hex');
+  return signatures.some((sig) =>
+    sig.length === expected.length &&
+    crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected)),
+  );
+}
+
+// Express: capture the RAW body for the webhook route
+app.post('/webhooks/ruffus', express.raw({ type: 'application/json' }), (req, res) => {
+  if (!verifyRuffusSignature(req.get('Ruffus-Signature') ?? '', req.body.toString('utf8'), process.env.RUFFUS_WEBHOOK_SECRET)) {
+    return res.status(400).send('invalid signature');
+  }
+  const event = JSON.parse(req.body.toString('utf8'));
+  // ... enqueue for processing, then respond fast
+  res.status(200).end();
+});
+```
+
+```php PHP
+function verifyRuffusSignature(string $header, string $rawBody, string $secret, int $tolerance = 300): bool {
+    $timestamp = null;
+    $signatures = [];
+    foreach (explode(',', $header) as $part) {
+        $part = trim($part);
+        if (str_starts_with($part, 't=')) $timestamp = (int) substr($part, 2);
+        if (str_starts_with($part, 'v1=')) $signatures[] = substr($part, 3);
+    }
+    if ($timestamp === null || $signatures === []) return false;
+    if (abs(time() - $timestamp) > $tolerance) return false;
+
+    $expected = hash_hmac('sha256', $timestamp . '.' . $rawBody, $secret);
+    foreach ($signatures as $sig) {
+        if (hash_equals($expected, $sig)) return true;
+    }
+    return false;
+}
+
+$rawBody = file_get_contents('php://input');
+$header = $_SERVER['HTTP_RUFFUS_SIGNATURE'] ?? '';
+if (!verifyRuffusSignature($header, $rawBody, getenv('RUFFUS_WEBHOOK_SECRET'))) {
+    http_response_code(400);
+    exit('invalid signature');
+}
+$event = json_decode($rawBody, true);
+```
+
+```python Python
+import hashlib, hmac, time
+
+def verify_ruffus_signature(header: str, raw_body: bytes, secret: str, tolerance: int = 300) -> bool:
+    timestamp, signatures = None, []
+    for part in (p.strip() for p in header.split(",")):
+        if part.startswith("t="):
+            timestamp = int(part[2:])
+        elif part.startswith("v1="):
+            signatures.append(part[3:])
+    if timestamp is None or not signatures:
+        return False
+    if abs(time.time() - timestamp) > tolerance:
+        return False
+
+    signed = f"{timestamp}.".encode() + raw_body
+    expected = hmac.new(secret.encode(), signed, hashlib.sha256).hexdigest()
+    return any(hmac.compare_digest(sig, expected) for sig in signatures)
+
+# Flask
+@app.post("/webhooks/ruffus")
+def ruffus_webhook():
+    if not verify_ruffus_signature(request.headers.get("Ruffus-Signature", ""), request.get_data(), os.environ["RUFFUS_WEBHOOK_SECRET"]):
+        return "invalid signature", 400
+    event = request.get_json()
+    # ... enqueue for processing, then respond fast
+    return "", 200
+```
+
+</CodeGroup>
+
+## Responding, retries, and auto-disable
+
+Respond with any `2xx` within **5 seconds**. Do the real work asynchronously — verify, enqueue, respond.
+
+On failure (non-2xx, timeout, or connection error) Ruffus retries up to **5 attempts** with backoff: 30s, 5m, 30m, 2h, 8h. Every attempt is logged individually in the delivery log.
+
+After **20 consecutive failed attempts** an endpoint is automatically disabled and the account owner is emailed. Fix your receiver, then re-enable the endpoint with `PATCH /v1/webhooks/{id}` (`{"status": "enabled"}`) or from the dashboard; re-enabling resets the failure counter. Events that occur while an endpoint is disabled are **not** queued for it — use `GET /v1/stamp-events` / `GET /v1/redemption-events` to backfill the gap.
+
+## Endpoint requirements
+
+- **HTTPS only**, on a publicly resolvable host. URLs pointing at private or internal addresses, or at Ruffus's own hosts, are rejected — at registration and again before every delivery.
+- No redirects: a redirect response counts as a failed attempt.
+- Up to **10 endpoints** per account.
+
+## Managing endpoints
+
+All management routes require the `webhooks:manage` scope.
+
+### Create
+
+`POST /v1/webhooks`
+
+```bash
+curl -X POST https://api.ruffus.app/v1/webhooks \
+  -H "X-Api-Key: rk_live_..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://example.com/webhooks/ruffus",
+    "description": "POS integration",
+    "events": ["stamp.issued", "reward.redeemed"]
+  }'
+```
+
+The response is the only time you'll see the full `secret`:
+
+```json
+{
+  "object": "webhook_endpoint",
+  "id": "e7d1...",
+  "url": "https://example.com/webhooks/ruffus",
+  "description": "POS integration",
+  "events": ["stamp.issued", "reward.redeemed"],
+  "status": "enabled",
+  "secret": "whsec_Zk3j...",
+  "secretLast4": "9x2A",
+  "autoDisabledAt": null,
+  "createdAt": "2026-07-15T12:00:00.000Z",
+  "updatedAt": "2026-07-15T12:00:00.000Z"
+}
+```
+
+### List, read, update, delete
+
+- `GET /v1/webhooks` — all endpoints (secret masked to `secretLast4`)
+- `GET /v1/webhooks/{id}`
+- `PATCH /v1/webhooks/{id}` — any of `url`, `description`, `events`, `status` (`enabled` / `disabled`)
+- `DELETE /v1/webhooks/{id}` — removes the endpoint and its delivery history
+
+### Rotate the secret
+
+`POST /v1/webhooks/{id}/rotate-secret`
+
+Returns the new secret (once). For the next **24 hours** deliveries are signed with both the new and the previous secret — deploy the new secret to your receiver any time inside that window with zero missed verifications.
+
+### Delivery log
+
+`GET /v1/webhooks/{id}/deliveries` — newest first, cursor-paginated with `limit` / `starting_after` (here "after" means *older than*, since the log reads backwards).
+
+```json
+{
+  "object": "webhook_delivery",
+  "id": "d4c2...",
+  "endpointId": "e7d1...",
+  "eventId": "evt_5f0c4a13-...",
+  "eventType": "stamp.issued",
+  "payload": { "id": "evt_5f0c4a13-...", "type": "stamp.issued", "...": "..." },
+  "attempt": 2,
+  "status": "delivered",
+  "responseStatus": 200,
+  "durationMs": 87,
+  "nextRetryAt": null,
+  "createdAt": "2026-07-02T13:11:31.000Z"
+}
+```
+
+`status` is one of `pending`, `delivered`, `failed` (will retry), `exhausted` (all 5 attempts failed). Delivery history is retained for **30 days**.
+
+### Replay
+
+`POST /v1/webhooks/deliveries/{deliveryId}/replay`
+
+Re-sends a settled delivery's exact payload as a fresh attempt (same `Ruffus-Event-Id`, so your dedup still applies). The endpoint must be enabled, and an in-flight delivery can't be replayed.
+
+## Delivery timing
+
+Events are dispatched within seconds of the action that caused them, with a safety-net sweep every minute — treat delivery order as approximate and rely on `createdAt` in the envelope, not arrival order. Bulk operations (a CSV import, a threshold change that backfills rewards) can emit many events at once; they drain in batches.

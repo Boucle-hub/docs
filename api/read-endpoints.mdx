@@ -1,0 +1,163 @@
+---
+title: "Ruffus API v1: Read Endpoints Reference"
+sidebarTitle: "Read Endpoints"
+description: "Reference for the Ruffus v1 read API — locations, cards, customers, membership balances, rewards, and the stamp and redemption event feeds."
+hidden: true
+noindex: true
+---
+
+> **Not yet live.** Private-preview reference; shapes may still change before launch.
+
+All endpoints below are `GET`, live under `https://api.ruffus.app/v1`, and follow the [conventions](/api/overview) for auth, pagination, and errors. List responses are `{ "object": "list", "data": […], "hasMore": bool }`.
+
+## Locations
+
+`GET /v1/locations` · scope `loyalty:read` · filters: `status` (`active` | `inactive`)
+
+`GET /v1/locations/{id}`
+
+```json
+{
+  "object": "location",
+  "id": "9b2f…",
+  "name": "Café Saint-Denis",
+  "address": "123 rue Saint-Denis, Montréal",
+  "lat": 45.52, "lng": -73.59,
+  "status": "active",
+  "joinSlug": "cafe-saint-denis",
+  "createdAt": "2026-05-01T14:03:00.000Z"
+}
+```
+
+Deleted locations never appear.
+
+## Cards
+
+`GET /v1/cards` · scope `loyalty:read`
+
+`GET /v1/cards/{id}`
+
+```json
+{
+  "object": "card",
+  "id": "c1a2…",
+  "family": "c1a2…",
+  "scope": "shared",
+  "locationId": null,
+  "name": { "fr": "Carte café", "en": "Coffee card", "es": null },
+  "rewardLabel": { "fr": "Café gratuit", "en": "Free coffee", "es": null },
+  "threshold": 10,
+  "rewardExpiryDays": null,
+  "active": true,
+  "pointsEnabled": false,
+  "createdAt": "2026-05-01T14:05:00.000Z"
+}
+```
+
+A card is a loyalty program. Multi-location accounts in granular mode have per-location clones; `family` groups a parent and its clones — treat it as the card's stable cross-location identity. Paused cards (`active: false`) are included: rewards already earned on them stay redeemable.
+
+## Customers
+
+`GET /v1/customers/{ref}` · scope `customers:read`
+
+`{ref}` is a customer id, or a prefixed lookup: `email:ana@example.com` or `phone:+15145551234` (URL-encode the ref: `email%3Aana%40example.com`).
+
+```json
+{
+  "object": "customer",
+  "id": "7e31…",
+  "email": "ana@example.com",
+  "phone": null,
+  "firstName": "Ana",
+  "locale": "fr",
+  "createdAt": "2026-06-11T19:22:00.000Z"
+}
+```
+
+Unknown refs, malformed refs, and erased (anonymized) customers all return the same `not_found`.
+
+### Membership balances
+
+`GET /v1/customers/{ref}/memberships` · scope `customers:read` · unpaginated (bounded by locations × cards)
+
+One entry per card per location the customer is enrolled in:
+
+```json
+{
+  "object": "membership",
+  "id": "m9f4…",
+  "customerId": "7e31…",
+  "locationId": "9b2f…",
+  "cardId": "c1a2…",
+  "stamps": 6,
+  "lifetimeStamps": 26,
+  "points": null,
+  "lifetimePoints": null,
+  "createdAt": "2026-06-11T19:22:00.000Z"
+}
+```
+
+`points` is the **spendable** points balance and `lifetimePoints` the all-time earned total; both are `null` on cards without points enabled.
+
+## Rewards
+
+`GET /v1/rewards` · scope `loyalty:read` · filters: `customer` (id), `location` (id), `status` (`available` | `redeemed` | `expired` | `pending_redemption`)
+
+```json
+{
+  "object": "reward",
+  "id": "r5c8…",
+  "status": "available",
+  "shortCode": "482913",
+  "membershipId": "m9f4…",
+  "cardId": "c1a2…",
+  "customerId": "7e31…",
+  "locationId": "9b2f…",
+  "earnedAt": "2026-07-01T16:40:00.000Z",
+  "expiresAt": null
+}
+```
+
+`shortCode` is the 6-digit code the customer shows at the counter. Ordered by `earnedAt`, then id.
+
+## Event feeds
+
+Append-only audit feeds — also the recommended polling fallback until webhooks ship. Poll with `since` \+ cursor pagination.
+
+### Stamp events
+
+`GET /v1/stamp-events` · scope `loyalty:read` · filters: `since` (ISO-8601), `location` (id)
+
+```json
+{
+  "object": "stamp_event",
+  "id": "se01…",
+  "customerId": "7e31…",
+  "anonymized": false,
+  "membershipId": "m9f4…",
+  "cardId": "c1a2…",
+  "locationId": "9b2f…",
+  "stamps": 1,
+  "balanceAfter": 7,
+  "campaignId": null,
+  "createdAt": "2026-07-02T13:11:00.000Z"
+}
+```
+
+For erased customers, `customerId` is `null` and `anonymized` is `true` — the event itself is preserved.
+
+### Redemption events
+
+`GET /v1/redemption-events` · scope `loyalty:read` · filters: `since` (ISO-8601)
+
+```json
+{
+  "object": "redemption_event",
+  "id": "re02…",
+  "rewardId": "r5c8…",
+  "locationId": "9b2f…",
+  "createdAt": "2026-07-03T18:02:00.000Z"
+}
+```
+
+Join against `/v1/rewards` for the customer and card context of a redemption.

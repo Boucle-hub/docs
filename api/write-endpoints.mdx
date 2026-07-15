@@ -1,0 +1,132 @@
+---
+title: "Ruffus API: Write Endpoints — Enroll, Earn, Redeem, Adjust"
+sidebarTitle: "Write endpoints"
+description: "Drive the loyalty loop from your own systems: enroll customers, credit stamps, redeem rewards, and apply corrections, with idempotency keys."
+hidden: true
+noindex: true
+---
+
+> **Not yet live.** The Ruffus public API is in private preview. This reference describes the v1 write API; endpoints activate for your account at launch.
+
+Write endpoints require the Custom plan. Scopes: `customers:write` for enrollment, `loyalty:write` for stamps and rewards. Writes have a stricter rate limit (60/min per key) on top of your plan's read limit.
+
+Every event these endpoints produce (`customer.enrolled`, `stamp.issued`, `reward.unlocked`, `reward.redeemed`) also flows to your [webhooks](/api/webhooks).
+
+## Idempotency
+
+All POSTs accept an `Idempotency-Key` header (≤255 characters, any unique string — a UUID works). Semantics, scoped to your API key:
+
+- First request: executes normally; the response is stored for 24 hours.
+- Retry with the **same key and same body**: the stored response is returned verbatim, with `Idempotent-Replay: true`.
+- Same key, **different body**: `422 idempotency_conflict` — key reuse is a bug on the caller's side.
+- Same key while the first request is still running: `409 conflict` — retry shortly.
+- If the original attempt failed with a 5xx, the key is released so the same key can retry.
+
+A new API key is a new idempotency namespace — replays don't carry across key rotation.
+
+```bash
+curl -X POST https://api.ruffus.app/v1/customers/7e31.../earn \
+  -H "X-Api-Key: rk_live_..." \
+  -H "Idempotency-Key: order-8841-stamp" \
+  -H "Content-Type: application/json" \
+  -d '{"location_id": "9b2f...", "stamps": 1}'
+```
+
+## POST /v1/customers — enroll
+
+Scope `customers:write`. Body: exactly one of `email` / `phone` (E.164 or 10-digit North American), plus `location_id`.
+
+Enrolls an **already-registered** customer at the location, auto-enrolling them in every active card there — the same semantics as scanning the QR poster. Repeat calls are safe: an already-enrolled customer returns `200` with `created: false` and fires nothing.
+
+```json
+{
+  "object": "customer_enrollment",
+  "customerId": "7e31...",
+  "locationId": "9b2f...",
+  "membershipIds": ["m9f4...", "m2c8..."],
+  "created": true
+}
+```
+
+**A person who has never signed up with Ruffus is a `404`.** Customer accounts carry privacy consent captured at signup (Québec Law 25) — an API call cannot create that consent on someone's behalf. To bank stamps for customers before they sign up, use the dashboard's CSV import: their stamps are credited automatically the moment they register.
+
+## POST /v1/customers/{ref}/earn
+
+Scope `loyalty:write`. `{ref}` is the customer id, or `email:`/`phone:`-prefixed lookup. Body:
+
+| Field | | |
+|---|---|---|
+| `location_id` | required | UUID of the earning location |
+| `card_id` | optional | Card (family) id from `GET /v1/cards`; defaults to the location's oldest active card |
+| `stamps` | optional | Integer 1–100, default 1 |
+
+Credits stamps exactly as asked — API earns deliberately skip in-store extras (campaign bonuses, referral payouts). Threshold crossings mint rewards as usual and fire `reward.unlocked`.
+
+```json
+{
+  "object": "earn_result",
+  "customerId": "7e31...",
+  "locationId": "9b2f...",
+  "cardId": "c1a2...",
+  "membershipId": "m9f4...",
+  "stamps": 1,
+  "balance": 7,
+  "unlockedRewardIds": []
+}
+```
+
+The customer must already be enrolled at the location — otherwise `409 conflict` with guidance to call `POST /v1/customers` first. Enrollment is never a side effect of earning.
+
+## POST /v1/customers/{ref}/redeem
+
+Scope `loyalty:write`. Body: exactly one of `reward_id` / `short_code` (the 6-digit customer-facing code), plus `location_id`.
+
+Runs the same redemption core as the staff terminal. An earned reward stays redeemable after its card is paused (matching in-store behavior).
+
+```json
+{
+  "object": "redeem_result",
+  "rewardId": "r5c8...",
+  "customerId": "7e31...",
+  "locationId": "9b2f...",
+  "cardId": "c1a2...",
+  "membershipId": "m9f4..."
+}
+```
+
+Errors: `404 not_found` for a reward that isn't this customer's at your account (no existence oracle); `409 conflict` when already redeemed/expired or when the reward belongs to a different location than `location_id`; `402 subscription_inactive` when the location's subscription lapsed.
+
+## POST /v1/customers/{ref}/adjust
+
+Scope `loyalty:write`. Body: `location_id`, optional `card_id`, and `stamps` — a **non-zero signed integer** (−100…100).
+
+Corrections are compensating events; history is never rewritten.
+
+- Positive delta: identical to `/earn` (threshold crossings mint rewards).
+- Negative delta: removes at most the current balance (`applied` reports what actually came off; balance floors at 0) and reduces lifetime stamps by the same amount. Already-minted rewards are **never** clawed back.
+
+```json
+{
+  "object": "adjust_result",
+  "customerId": "7e31...",
+  "locationId": "9b2f...",
+  "cardId": "c1a2...",
+  "membershipId": "m9f4...",
+  "requested": -5,
+  "applied": -3,
+  "balance": 0,
+  "unlockedRewardIds": []
+}
+```
+
+## Common error responses
+
+| Status | Code | Meaning |
+|---|---|---|
+| 400 | `validation_error` | Malformed body; see `details[]` per field |
+| 402 | `subscription_inactive` | The location's Ruffus subscription is not active |
+| 403 | `missing_scope` / `plan_not_entitled` | Key lacks the scope, or the plan lacks write access |
+| 404 | `not_found` | Customer, location, card, or reward not visible to your account |
+| 409 | `conflict` | Not enrolled, reward not redeemable, or idempotent request in flight |
+| 422 | `idempotency_conflict` | Idempotency-Key reused with a different payload |
+| 429 | `rate_limited` | Write limit (60/min/key) exceeded — honor `Retry-After` |

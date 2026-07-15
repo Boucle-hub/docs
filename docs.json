@@ -62,6 +62,7 @@
             "pages": [
               "api/overview",
               "api/read-endpoints",
+              "api/write-endpoints",
               "api/webhooks"
             ]
           },

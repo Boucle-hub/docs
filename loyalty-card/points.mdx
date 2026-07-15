@@ -1,0 +1,87 @@
+---
+title: "Points: Spend and Product-Based Rewards Alongside Stamps"
+sidebarTitle: "Points"
+description: "Turn on points to reward customers by dollars spent or specific products, on top of your stamp card — with its own redemption catalog and customer-initiated redeem flow."
+---
+
+Points are an optional layer on top of your stamp card, not a replacement for it. Customers keep collecting stamps toward their reward exactly as before; points give you a second, more flexible way to reward visits — by a flat rate per stamp, by how much a customer spent, or by which specific product they bought — redeemable against a catalog you define.
+
+<Note>
+  Points are opt-in per card. Turn them on from **Dashboard → Settings → Program rules**, or manage everything in one place at **Dashboard → Points** once enabled.
+</Note>
+
+## Turning on points
+
+From **Settings → Program rules**, switch on **Points** — customers start earning points alongside stamps on their next approved stamp. Once points are on, a **Points** section appears in your dashboard nav with three tabs: **Rules**, **Products**, and **Redemption items**.
+
+## How customers earn points
+
+You choose one earn mode per card, in the Points **Rules** tab:
+
+| Mode | How it works |
+| --- | --- |
+| **Per stamp (flat rate)** | Every approved stamp earns a fixed number of points you set — the same number every time, regardless of what was purchased. |
+| **Per dollar spent** | Staff enter the sale amount when approving a stamp request, and points are calculated from your points-per-dollar rate. |
+
+With **per dollar spent**, an **Amount (\$)** field appears on the stamp request staff are approving — it's required before they can approve. Points are always rounded down to the nearest whole point, so merchants can set a slightly generous rate without worrying about odd fractional results.
+
+<Note>
+  Switching earn modes only affects points earned going forward — a customer's existing point balance is never recalculated or reset.
+</Note>
+
+## Product bonuses
+
+Turn on **Product bonuses** (Points → Rules) to let staff pick a specific product on a stamp request and grant that product's own fixed point value instead of the base rate — useful for pushing a specific item, like extra points for a seasonal drink.
+
+1. Add products to your catalog from the Points → **Products** tab — each with a French, English, and optional Spanish name (Spanish falls back to English if left blank), and an optional point override.
+2. When product bonuses are on, staff see a **Product (optional)** field on the stamp request. Picking a product with a point value set overrides the base calculation entirely for that scan; leaving it blank, or picking a product with no override set, falls back to the base rate.
+3. **Archive** a product to stop it from being offered without deleting its history — past scans that used it keep their record.
+
+## Redemption catalog
+
+Points are spent against a catalog you build in the Points → **Redemption items** tab — each item has a French, English, and optional Spanish label and a point cost. This is entirely separate from your stamp-card reward: a customer can redeem a points item without having a completed stamp card, and vice versa.
+
+### How a customer redeems points
+
+Redeeming points mirrors how a stamp request works — a customer-initiated request that staff confirm in one tap, not a code staff type in.
+
+<Steps>
+  <Step title="Customer opens their card">
+    Their current point balance and the redemption catalog are shown right on their card, with items they can't yet afford greyed out.
+  </Step>
+  <Step title="Customer taps an item">
+    A redemption request is created and the customer sees "Waiting for staff to confirm…".
+  </Step>
+  <Step title="Staff gets the request">
+    It shows up alongside stamp requests at the counter, labeled with the customer's name and the item's point cost.
+  </Step>
+  <Step title="Staff taps Confirm">
+    Points are debited from the customer's balance immediately and their screen updates in real time.
+  </Step>
+</Steps>
+
+Staff never need to check a balance by hand — an item is only offered to the customer if they can already afford it, and the confirm step re-checks the balance and the item's availability server-side before debiting.
+
+## Where customers see their balance
+
+A customer's point balance shows on their card in the customer portal, and as a **Points** field on their Apple Wallet or Google Wallet pass — kept up to date automatically, the same way stamp counts are.
+
+## What if...
+
+<AccordionGroup>
+  <Accordion title="A customer's balance looks wrong?">
+    Every point earned or spent is recorded permanently, so the balance shown is always the true running total — it can't drift out of sync. If something still looks off, reach out to [hello@ruffus.app](mailto:hello@ruffus.app).
+  </Accordion>
+
+  <Accordion title="A redemption item is removed after a customer already sees it?">
+    If an item is archived between the customer opening their card and staff confirming the request, the request is declined rather than silently going through — the customer can pick a different item.
+  </Accordion>
+
+  <Accordion title="A points redemption gets confirmed by mistake?">
+    As with stamp-card rewards, there's currently no self-serve way to reverse a redemption. Contact [hello@ruffus.app](mailto:hello@ruffus.app) and the team can help sort it out.
+  </Accordion>
+
+  <Accordion title="I turn points off after customers have already earned some?">
+    Nothing is lost — existing balances and history stay exactly as they are. Only new points stop being earned; customers can still redeem what they already have as long as your redemption catalog stays active.
+  </Accordion>
+</AccordionGroup>

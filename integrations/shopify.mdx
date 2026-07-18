@@ -1,0 +1,77 @@
+---
+title: "Shopify"
+description: "Connect your Shopify store to Ruffus — every paid online order earns stamps and points automatically, and customers redeem rewards as single-use discount codes."
+icon: "bag"
+hidden: true
+---
+
+The Ruffus Loyalty app for Shopify connects your online store to the same loyalty card your customers carry in Apple and Google Wallet. Every paid order earns stamps and points automatically — no staff scan, no storefront widget — and customers can spend a reward as a single-use discount code at your checkout.
+
+<Info>
+  The app is **included free with every paid Ruffus plan**. Online-only merchants (no physical counter) can subscribe directly through Shopify instead.
+</Info>
+
+## Install the app
+
+1. Install **Ruffus Loyalty** from the Shopify App Store (or your install link during early access).
+2. Approve the requested permissions — Ruffus reads orders and customer emails to award loyalty credit, and writes discount codes for reward redemption. Nothing else.
+3. The app opens inside your Shopify admin.
+
+## Activate it
+
+There are two ways to activate, depending on your situation:
+
+### You already have a Ruffus plan (recommended)
+
+The app is included with your plan:
+
+1. In the embedded app (Shopify admin), click **Generate link code**. You get an 8-digit code valid for 10 minutes.
+2. In your [Ruffus dashboard](https://app.ruffus.app), go to **Settings → Integrations → Shopify** and enter the code.
+3. Pick which location your online orders should credit — online earning lands on that location's card.
+
+That's it. No extra charge on your Shopify bill.
+
+### Online store only
+
+No Ruffus account? Subscribe directly in the app — billed through Shopify, 14-day free trial. You get one loyalty card, wallet passes, and trilingual (FR/EN/ES) programs. If you later open a physical counter, a Ruffus plan includes the app and much more.
+
+## How earning works
+
+- Every **paid order** earns 1 stamp on your card, plus points if your card has points enabled (per-dollar points use the order total in your shop's base currency).
+- The customer is matched by **order email**. If they already joined your Ruffus card with that email, credit lands instantly and their wallet pass updates.
+- If they haven't joined yet, the credit **waits for them**: when they join your card later (with the same email), everything they earned online is applied automatically. Unclaimed credit is deleted after 90 days, in line with Québec's Law 25.
+- **Refunds** automatically reverse what the order earned — never more than the customer's current balance, and already-unlocked rewards are not clawed back.
+
+<Note>
+  Online orders don't apply campaign or tier bonuses — those stay exclusive to in-person visits.
+</Note>
+
+## How online redemption works
+
+When a customer has an unlocked reward, their Ruffus wallet offers **Use online** for stores with a connected Shopify shop:
+
+1. The customer confirms — this spends the reward, like an in-store redemption.
+2. Ruffus generates a **single-use discount code** (100% off one item — the online equivalent of a free-item reward). The discount applies to the cheapest eligible item in the cart.
+3. They paste the code at your Shopify checkout. Codes expire with the reward, or after 30 days.
+
+## Privacy & compliance
+
+- Order emails held before a customer joins are purged after **90 days** (Law 25).
+- Shopify's privacy webhooks (customer data requests, customer redaction, shop redaction) are fully supported — data obtained through Shopify is deleted on request.
+- Customers who joined your card directly keep their own Ruffus account and its self-service export/deletion, independent of Shopify.
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="What happens if I cancel my Ruffus plan?">
+    The app's bundle entitlement ends with your plan. Your Shopify connection stays installed — subscribe through Shopify to keep online earning active, or reactivate your Ruffus plan.
+  </Accordion>
+
+  <Accordion title="What happens if I uninstall the app?">
+    Online earning stops immediately. Your Ruffus account, cards, and customer balances are untouched. 48 hours later, Shopify tells us to delete the connection and any unclaimed online credit — we do.
+  </Accordion>
+
+  <Accordion title="Which orders earn credit?">
+    Any order that reaches **paid** status and carries a customer email. Test orders on development stores work too — handy for trying the flow.
+  </Accordion>
+</AccordionGroup>

@@ -38,6 +38,7 @@
               "loyalty-card/multiple-cards",
               "loyalty-card/stamps-and-rewards",
               "loyalty-card/points",
+              "loyalty-card/tiers",
               "loyalty-card/qr-code",
               "loyalty-card/nearby-reminders",
               "loyalty-card/wallet"
@@ -47,8 +48,11 @@
             "group": "Dashboard & Analytics",
             "pages": [
               "dashboard/overview",
+              "dashboard/import",
               "dashboard/customers",
-              "dashboard/multi-location"
+              "dashboard/multi-location",
+              "dashboard/settings",
+              "dashboard/campaigns"
             ]
           },
           {

@@ -55,6 +55,7 @@ Each key carries an explicit set of scopes, chosen at creation:
 | --- | --- |
 | Basic | Not available |
 | Growth | Read scopes \+ `webhooks:manage`, 300 requests/min per key |
+| Network | All scopes, 600 requests/min per key |
 | Custom | All scopes, 600 requests/min per key |
 
 If your plan changes, existing keys are kept: requests using scopes your new plan lacks return `plan_not_entitled` until you upgrade again.

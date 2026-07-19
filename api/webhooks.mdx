@@ -2,11 +2,7 @@
 title: "Ruffus Webhooks: Events, Signatures, and Delivery"
 sidebarTitle: "Webhooks"
 description: "Receive signed HTTP callbacks when customers enroll, earn stamps, unlock rewards, or redeem — with verification samples, retry behavior, and delivery logs."
-hidden: true
-noindex: true
 ---
-
-> **Not yet live.** The Ruffus public API is in private preview. This reference describes v1 outbound webhooks; endpoints activate for your account at launch.
 
 Webhooks push loyalty events to your server as they happen, so you don't have to poll the [event feeds](/api/read-endpoints). Ruffus sends an HTTPS `POST` to your endpoint for every event type you subscribe to, signed so you can verify it came from us.
 

@@ -2,13 +2,9 @@
 title: "Ruffus API v1: Read Endpoints Reference"
 sidebarTitle: "Read Endpoints"
 description: "Reference for the Ruffus v1 read API — locations, cards, customers, membership balances, rewards, and the stamp and redemption event feeds."
-hidden: true
-noindex: true
 ---
 
-> **Not yet live.** Private-preview reference; shapes may still change before launch.
-
-All endpoints below are `GET`, live under `https://api.ruffus.app/v1`, and follow the [conventions](/api/overview) for auth, pagination, and errors. List responses are `{ "object": "list", "data": […], "hasMore": bool }`.
+All endpoints below are `GET`, live under `https://api.ruffus.app/v1`, and follow the [conventions](/api/overview) for auth, pagination, and errors. List responses are `{ "object": "list", "data": […], "hasMore": bool }`. See [Write Endpoints](/api/write-endpoints) for creating and modifying data.
 
 ## Locations
 
@@ -122,7 +118,7 @@ One entry per card per location the customer is enrolled in:
 
 ## Event feeds
 
-Append-only audit feeds — also the recommended polling fallback until webhooks ship. Poll with `since` \+ cursor pagination.
+Append-only audit feeds — also a useful polling fallback or backfill tool alongside [webhooks](/api/webhooks). Poll with `since` \+ cursor pagination.
 
 ### Stamp events
 

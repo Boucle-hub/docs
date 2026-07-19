@@ -1,0 +1,158 @@
+---
+title: "Ruffus API v1: Write Endpoints Reference"
+sidebarTitle: "Write Endpoints"
+description: "Reference for the Ruffus v1 write API — enrolling customers, issuing stamps, correcting balances, and redeeming rewards from your own systems."
+---
+
+All endpoints below are `POST`, live under `https://api.ruffus.app/v1`, and follow the [conventions](/api/overview) for auth, pagination, and errors. Every endpoint here supports the `Idempotency-Key` header described in [Idempotency](/api/overview#idempotency) — use it whenever a request might be retried by your infrastructure.
+
+## Enroll a customer
+
+`POST /v1/customers` · scope `customers:write`
+
+Attaches an **already-registered** Ruffus customer to a location's cards — the API can't create a brand-new customer from scratch (email/phone alone isn't enough consent under Law 25). New people should join via a QR code or your CSV import.
+
+```bash
+curl -X POST https://api.ruffus.app/v1/customers \
+  -H "X-Api-Key: rk_live_..." \
+  -H "Content-Type: application/json" \
+  -d '{ "email": "ana@example.com", "location_id": "9b2f..." }'
+```
+
+Body — exactly one of `email` or `phone`, plus `location_id`:
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `email` | string | |
+| `phone` | string | E.164, or 10-digit NANP |
+| `location_id` | string (UUID) | |
+
+Enrolls the customer into every active card at that location — the same set they'd get from scanning the location's QR code.
+
+```json
+{
+  "object": "customer_enrollment",
+  "customerId": "7e31…",
+  "locationId": "9b2f…",
+  "membershipIds": ["m9f4…"],
+  "created": true
+}
+```
+
+Re-enrolling someone already on those cards is a no-op: `200` with `created: false`, same body otherwise. `email`/`phone` that don't match a registered customer return `404 not_found`.
+
+## Issue a stamp
+
+`POST /v1/customers/{ref}/earn` · scope `loyalty:write`
+
+The customer must already be enrolled at the location — this endpoint doesn't auto-enroll. Enroll first with the endpoint above if you're not sure.
+
+```bash
+curl -X POST https://api.ruffus.app/v1/customers/7e31.../earn \
+  -H "X-Api-Key: rk_live_..." \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: order_48213-stamp" \
+  -d '{ "location_id": "9b2f...", "stamps": 1, "external_id": "order_48213" }'
+```
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `location_id` | string (UUID) | required |
+| `card_id` | string (UUID) | optional — defaults to the location's sole active card; required if it has more than one |
+| `stamps` | integer | 1–100, default 1 |
+| `external_id` | string | optional, 1–255 chars — your own dedup key (see below) |
+
+```json
+{
+  "object": "earn_result",
+  "customerId": "7e31…",
+  "locationId": "9b2f…",
+  "cardId": "c1a2…",
+  "membershipId": "m9f4…",
+  "stamps": 1,
+  "balance": 7,
+  "unlockedRewardIds": [],
+  "deduplicated": false
+}
+```
+
+`unlockedRewardIds` is populated when this grant crosses the card's threshold. This endpoint issues **only** the stamps you request — it never applies in-person extras like campaign bonuses, referral credit, or tier multipliers.
+
+**Deduplication by `external_id`:** pass a stable key that identifies the real-world event (e.g. your own order or POS transaction id). A second request reusing the same `external_id` on the same membership doesn't re-grant — it returns `200` with `deduplicated: true` and the current balance, unchanged. This is independent of `Idempotency-Key`: use `external_id` to make the *business action* idempotent even from a different request, and `Idempotency-Key` to make an individual *HTTP retry* safe.
+
+A customer not enrolled at `location_id` returns `409 conflict` — enroll them first.
+
+## Adjust a balance
+
+`POST /v1/customers/{ref}/adjust` · scope `loyalty:write`
+
+For corrections — refunds, staff mistakes, manual reconciliation — without rewriting history. Adjustments are recorded as their own compensating event, never edits to a past stamp grant.
+
+```bash
+curl -X POST https://api.ruffus.app/v1/customers/7e31.../adjust \
+  -H "X-Api-Key: rk_live_..." \
+  -H "Content-Type: application/json" \
+  -d '{ "location_id": "9b2f...", "stamps": -1, "external_id": "refund_9911" }'
+```
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `location_id` | string (UUID) | required |
+| `card_id` | string (UUID) | optional, same default as `/earn` |
+| `stamps` | integer | non-zero, magnitude ≤ 100 — positive to add, negative to remove |
+| `external_id` | string | optional, same dedup semantics as `/earn` |
+
+A positive `stamps` behaves exactly like `/earn` (can unlock a reward). A negative `stamps` removes **at most the customer's current balance** — it floors at zero rather than going negative, and never claws back a reward that's already been minted. Because of the floor, the amount actually removed can be less than what you requested:
+
+```json
+{
+  "object": "adjust_result",
+  "customerId": "7e31…",
+  "locationId": "9b2f…",
+  "cardId": "c1a2…",
+  "membershipId": "m9f4…",
+  "requested": -3,
+  "applied": -2,
+  "balance": 0,
+  "unlockedRewardIds": [],
+  "deduplicated": false
+}
+```
+
+Same enrollment requirement, `external_id` dedup, and error shape as `/earn`.
+
+## Redeem a reward
+
+`POST /v1/customers/{ref}/redeem` · scope `loyalty:write`
+
+```bash
+curl -X POST https://api.ruffus.app/v1/customers/7e31.../redeem \
+  -H "X-Api-Key: rk_live_..." \
+  -H "Content-Type: application/json" \
+  -d '{ "short_code": "482913", "location_id": "9b2f..." }'
+```
+
+Body — exactly one of `reward_id` or `short_code`, plus `location_id`:
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `reward_id` | string (UUID) | |
+| `short_code` | string | the 6-digit code the customer shows you; must currently be `available` or `pending_redemption` |
+| `location_id` | string (UUID) | required |
+
+```json
+{
+  "object": "redeem_result",
+  "rewardId": "r5c8…",
+  "customerId": "7e31…",
+  "locationId": "9b2f…",
+  "cardId": "c1a2…",
+  "membershipId": "m9f4…"
+}
+```
+
+The reward is looked up scoped to your merchant and this customer — one belonging to someone else, or to a different merchant, returns `404 not_found` either way. A reward tied to a different location than the one you passed returns `409 conflict`. A reward that's already been redeemed or has expired returns `409 conflict`. If the location's Ruffus subscription isn't active, `409 subscription_inactive`.
+
+## Typical use
+
+These four endpoints are the same primitives your POS, e-commerce checkout, or back-office tooling can call directly to drive loyalty — mirroring what staff-scan and the [Shopify integration](/integrations/shopify) do internally.

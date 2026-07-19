@@ -2,13 +2,9 @@
 title: "Ruffus API: Authentication, Keys, and Conventions"
 sidebarTitle: "API Overview"
 description: "Authenticate to the Ruffus public API with API keys, understand scopes, plan entitlements, rate limits, pagination, and the error envelope."
-hidden: true
-noindex: true
 ---
 
-> **Not yet live.** The Ruffus public API is in private preview. This reference describes the v1 read API; endpoints activate for your account at launch.
-
-The Ruffus API lets you read your loyalty data — locations, cards, customers, balances, rewards, and event feeds — from your own systems. It is a server-to-server API: requests from browsers are unsupported by design (no CORS headers are sent), because API keys must never ship in front-end code.
+The Ruffus API lets you read and write your loyalty data — locations, cards, customers, balances, rewards, and event feeds — from your own systems. It is a server-to-server API: requests from browsers are unsupported by design (no CORS headers are sent), because API keys must never ship in front-end code.
 
 ## Base URL
 
@@ -44,10 +40,10 @@ Each key carries an explicit set of scopes, chosen at creation:
 | Scope | Grants |
 | --- | --- |
 | `customers:read` | Customer lookup and membership balances |
-| `customers:write` | Creating and updating customers _(write API, upcoming)_ |
+| `customers:write` | Enrolling existing customers at a location |
 | `loyalty:read` | Locations, cards, rewards, and event feeds |
-| `loyalty:write` | Issuing stamps and redeeming rewards _(write API, upcoming)_ |
-| `webhooks:manage` | Webhook endpoint management _(upcoming)_ |
+| `loyalty:write` | Issuing stamps, adjustments, and redeeming rewards |
+| `webhooks:manage` | Webhook endpoint management |
 
 ## Plan entitlements
 
@@ -91,7 +87,22 @@ Every error uses one envelope:
 | `rate_limited` | 429 | Too many requests |
 | `validation_error` | 400 | Bad parameters — see `details[]` per field |
 | `not_found` | 404 | No such resource in your account |
+| `conflict` | 409 | The request can't be applied in the resource's current state — see the message |
+| `subscription_inactive` | 409 | The location's Ruffus subscription isn't active |
+| `idempotency_conflict` | 422 | `Idempotency-Key` reused with a different request body |
 | `internal_error` | 500 | Something went wrong on our side |
+
+## Idempotency
+
+Write endpoints accept an optional `Idempotency-Key` header (1–255 chars) — reuse the same key to safely retry a request (network timeout, no response received) without double-applying it.
+
+- First request with a key: processed normally, and the response is stored against that key for **24 hours**.
+- Retried with the **same** key and the same body: the stored response is replayed verbatim, byte-for-byte, with an `Idempotent-Replay: true` header — safe to retry as many times as you like.
+- Retried with the **same** key and a **different** body: rejected with `422 idempotency_conflict`.
+- Concurrent requests using the same not-yet-finished key: the second one gets `409 conflict` — wait for the first to finish, then retry with the same key if needed.
+- A request that fails with a `5xx` releases its key immediately, so you can retry right away; `4xx` responses are stored and replayed like any other outcome.
+
+Keys are scoped to the API key that made the request — reusing a key value across two different API keys does not collide. This is separate from the `external_id` field on the [`/earn` and `/adjust`](/api/write-endpoints) endpoints, which deduplicates by *business meaning* (e.g. "this POS transaction") rather than by *request delivery* — use `Idempotency-Key` for retry-safety and `external_id` for your own dedup key, together if you like.
 
 ## Pagination
 

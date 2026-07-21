@@ -36,6 +36,7 @@
             "pages": [
               "loyalty-card/customization",
               "loyalty-card/multiple-cards",
+              "loyalty-card/nfc-cards",
               "loyalty-card/stamps-and-rewards",
               "loyalty-card/points",
               "loyalty-card/tiers",

@@ -30,6 +30,10 @@ Every stamp in Ruffus starts as a request from the customer and only lands once 
   If staff don't act within the ~30-second window, the request simply expires. The customer can scan again to start a new one — nothing is lost.
 </Note>
 
+<Tip>
+  Some locations use an **NFC tap card** at the counter instead of a phone-scanned QR code. A tap grants the stamp instantly with no staff approval step — the printed QR poster still works as a fallback. See [NFC Station Cards](/loyalty-card/nfc-cards) if this is available at your location.
+</Tip>
+
 ## Cooldown between stamps
 
 To prevent the same visit from generating multiple stamps, Ruffus enforces a cooldown after each stamp is earned — 60 minutes by default. Merchants can adjust or disable this in **Settings → Program rules**. If a customer scans again before the cooldown ends, they see a friendly screen letting them know when they can earn their next stamp.
@@ -50,6 +54,10 @@ To prevent the same visit from generating multiple stamps, Ruffus enforces a coo
     The stamp count resets and a new cycle begins right away. The code is single-use, so the same reward can never be redeemed twice.
   </Step>
 </Steps>
+
+<Note>
+  No terminal handy? If redemption PINs are enabled (**Settings → Program rules**), the customer's claim screen can offer **Staff: approve here** instead — a staff member types their PIN directly on the customer's phone to approve the redemption, no terminal needed. It uses stricter rate limits than the terminal since the device isn't staff-controlled.
+</Note>
 
 You can review redemption activity anytime at **Dashboard → Rewards**, which shows KPIs, full redemption history, and your top redeemers.
 

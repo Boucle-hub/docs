@@ -1,0 +1,67 @@
+---
+title: "NFC Station Cards: Tap-to-Stamp at the Counter"
+sidebarTitle: "NFC Cards"
+description: "Mount an NFC tap card at your register so customers earn a stamp with a single tap — no phone camera, no staff approval, printed QR poster still works as a fallback."
+---
+
+An NFC station card sits at your counter next to (or instead of) your printed QR poster. A customer taps their phone against it and their stamp lands immediately — no camera, no staff approval step.
+
+<Info>
+  NFC cards are optional hardware, included on your plan at no extra cost. How many you can run at once depends on your plan: **1** on Basic, **2** on Growth, **3** on Network. Contact [hello@ruffus.app](mailto:hello@ruffus.app) to order cards for your location.
+</Info>
+
+## How a tap works
+
+<Steps>
+  <Step title="Customer taps their phone">
+    Holding their phone near the card opens a link in their browser — no app, no camera permission.
+  </Step>
+  <Step title="Ruffus verifies the tap">
+    Every tap carries a fresh, single-use cryptographic signature from the card itself. Ruffus checks it's genuine and hasn't been used before, then grants the stamp.
+  </Step>
+  <Step title="Stamp lands instantly">
+    No staff approval needed — the same cooldown and campaign-bonus rules that apply to QR stamps also apply here.
+  </Step>
+</Steps>
+
+<Note>
+  If the customer isn't signed in yet, they're guided through a quick sign-up first, then the stamp is applied automatically once they finish joining — nothing is lost.
+</Note>
+
+## Managing your cards
+
+From **Dashboard → QR Poster**, an **NFC Cards** section lists every card enrolled at your location(s), lets you revoke a lost or damaged card, and request more.
+
+- **Revoke** takes effect immediately — a revoked card stops working on its next tap and doesn't count against your plan's card limit, so you can enroll a replacement right away.
+- Cards are shipped **pre-programmed** by Ruffus; there's nothing for you to configure on the card itself.
+
+## Compatibility
+
+Most recent phones support tap-to-read out of the box:
+
+- **Android** — any NFC-capable phone with Chrome.
+- **iPhone XS and newer** — works with the screen on (the phone can be locked). Older iPhones (7/8 and similar) can't read NFC in the background — those customers use the printed QR poster instead, which always stays active as a fallback.
+
+## What if...
+
+<AccordionGroup>
+  <Accordion title="A customer taps twice in a row?">
+    The second tap is treated like any repeat scan — if you have a cooldown set, they'll see a friendly "already stamped" screen rather than earning twice.
+  </Accordion>
+
+  <Accordion title="Someone reuses an old tap (screenshot, browser history)?">
+    Each tap's signature is single-use. Reopening a previous tap shows a "tap again" screen instead of granting a stamp.
+  </Accordion>
+
+  <Accordion title="A customer has multiple loyalty cards and taps?">
+    If it's clear which of your cards the tap should credit, the stamp is auto-granted. If it's ambiguous, they're shown a quick picker in the app to choose the right card first.
+  </Accordion>
+
+  <Accordion title="Does a tap trigger referral bonuses or points/tier bonuses?">
+    Not yet — v1 NFC taps grant the base stamp only. Referral and points/tier bonuses still apply normally to QR-scanned and staff-approved stamps.
+  </Accordion>
+
+  <Accordion title="Can a customer redeem a reward by tapping?">
+    Taps are for earning stamps only. Redeeming a completed reward still goes through the usual claim flow — at the Redeem terminal, or via staff PIN approval on the customer's phone if you have that enabled. See [Stamps and Rewards](/loyalty-card/stamps-and-rewards#how-redemption-works).
+  </Accordion>
+</AccordionGroup>
